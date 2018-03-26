@@ -1,14 +1,18 @@
 package com.example.maki.androidprojekat;
 
+import android.preference.PreferenceActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class SettingsActivity extends AppCompatActivity {
+
+
+public class SettingsActivity extends PreferenceActivity {
 
     @Override
+    @SuppressWarnings("deprecation")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        addPreferencesFromResource(R.layout.preferences);
     }
 
     protected void onStart() {
