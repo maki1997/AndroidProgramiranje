@@ -6,6 +6,88 @@
     android:layout_height="match_parent"
     tools:context="com.example.maki.androidprojekat.ReadPostActivity">
 
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="31dp"
+        app:srcCompat="@mipmap/skull"
+        android:contentDescription="@string/image"/>
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/imageView1"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="19dp"
+        android:layout_marginEnd="19dp"
+        android:layout_toEndOf="@id/imageView1"
+        android:text="title"
+        android:id="@+id/appCompatTextView2" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageView1"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginStart="19dp"
+        android:text="description"
+        android:id="@+id/appCompatTextView" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/imageView1"
+        android:layout_marginEnd="19dp"
+        android:layout_marginBottom="50dp"
+        android:layout_marginStart="19dp"
+        android:layout_toEndOf="@id/imageView1"
+        android:text="author"/>
+
+
+    <ImageButton
+        android:id="@+id/imageButton3"
+        android:contentDescription="@string/like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/imageView1"
+        android:layout_below="@id/appCompatTextView"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        app:srcCompat="@mipmap/like" />
+
+    <ImageButton
+        android:contentDescription="@string/dislike"
+        android:id="@+id/imageButton4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/imageButton3"
+        android:layout_toRightOf="@id/imageButton3"
+        android:layout_marginStart="200dp"
+        app:srcCompat="@mipmap/dislike" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageButton3"
+        android:hint="Type in you comment..."
+        android:layout_marginStart="19dp"
+        android:layout_marginEnd="19dp"
+        android:layout_marginTop="19dp"
+        android:contentDescription="@string/comment"/>
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:text="25.09.1997"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="5dp"/>
 
 
 </RelativeLayout>

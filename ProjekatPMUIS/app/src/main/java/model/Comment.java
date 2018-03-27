@@ -15,5 +15,5 @@ public class Comment {
     private Post post;
     private int likes;
     private int dislikes;
-    private Status status;
+   // private Status status;
 }
