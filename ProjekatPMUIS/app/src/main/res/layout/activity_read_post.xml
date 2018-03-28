@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.maki.androidprojekat.ReadPostActivity">
-
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="80dp"
@@ -45,8 +44,8 @@
         android:layout_alignBottom="@id/imageView1"
         android:layout_marginEnd="19dp"
         android:layout_marginBottom="50dp"
-        android:layout_marginStart="19dp"
         android:layout_toEndOf="@id/imageView1"
+        android:layout_marginStart="19dp"
         android:text="author"/>
 
 
@@ -68,7 +67,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageButton3"
         android:layout_toRightOf="@id/imageButton3"
-        android:layout_marginStart="200dp"
+        android:layout_marginStart="190dp"
         app:srcCompat="@mipmap/dislike" />
 
     <EditText
@@ -79,7 +78,8 @@
         android:layout_marginStart="19dp"
         android:layout_marginEnd="19dp"
         android:layout_marginTop="19dp"
-        android:contentDescription="@string/comment"/>
+        android:contentDescription="@string/comment"
+        android:id="@+id/comment"/>
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -87,7 +87,250 @@
         android:text="25.09.1997"
         android:layout_alignParentRight="true"
         android:layout_marginEnd="5dp"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5dp"
+        android:id="@+id/date"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:layout_toRightOf="@id/imageButton3"
+        android:layout_below="@id/appCompatTextView"
+        android:layout_marginTop="27dp"
+        android:text="20"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:layout_toLeftOf="@id/imageButton4"
+        android:layout_below="@id/appCompatTextView"
+        android:layout_marginTop="27dp"
+        android:layout_alignRight="@id/comment"
+        android:text="20"/>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/comment"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="KOMENTAR 1"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <ImageButton
+                android:contentDescription="@string/like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/like" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+            <ImageButton
+                android:contentDescription="@string/like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/dislike" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="KOMENTAR 2"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:contentDescription="@string/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/like" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+                <ImageButton
+                    android:contentDescription="@string/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/dislike" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="KOMENTAR 3"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:contentDescription="@string/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/like" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+                <ImageButton
+                    android:contentDescription="@string/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/dislike" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="KOMENTAR 4"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:contentDescription="@string/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/like" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+                <ImageButton
+                    android:contentDescription="@string/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/dislike" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="KOMENTAR 5"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:contentDescription="@string/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/like" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+                <ImageButton
+                    android:contentDescription="@string/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/dislike" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="KOMENTAR 6"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageButton
+                    android:contentDescription="@string/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/like" />
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+                <ImageButton
+                    android:contentDescription="@string/like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/dislike" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:layout_marginTop="8dp"
+                    android:text="20"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+
 
 
 </RelativeLayout>
