@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.maki.androidprojekat.PostsActivity"
-    android:background="@drawable/wp">
+    android:background="@drawable/wp"
+    android:id="@+id/posts_drawer_layout">
 
 
 
@@ -59,13 +60,26 @@
         tools:layout_editor_absoluteY="16dp" />
 
     </RelativeLayout>
+
     <android.support.design.widget.NavigationView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        app:menu="@menu/nav_menu"
-        android:layout_gravity="start">
+        app:headerLayout="@layout/nav_drawer"
+        android:layout_gravity="start"
+        android:id="@+id/navigation_drawer">
 
 
+        <ListView
+            android:layout_marginTop="130dp"
+            android:background="@drawable/wp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contextClickable="true"
+            android:choiceMode="singleChoice"
+            android:divider="@color/black"
+            android:dividerHeight="2dp"
+            android:id="@+id/list_view_posts"
+            />
     </android.support.design.widget.NavigationView>
 
 
