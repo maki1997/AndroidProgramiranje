@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.maki.androidprojekat.PostsActivity">
+    tools:context="com.example.maki.androidprojekat.PostsActivity"
+    android:background="@drawable/wp">
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <include
+        android:id="@+id/app_bar"
+        layout="@layout/app_bar">
+
+
+    </include>
+
 
     <Button
         android:id="@+id/button"
@@ -12,8 +26,8 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/button2"
         android:layout_alignBottom="@+id/button2"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
+        android:layout_marginEnd="14dp"
+        android:layout_toStartOf="@+id/button2"
         android:onClick="btnStartsCreatePostActivity"
         android:text="CreatePost"
         tools:layout_editor_absoluteX="16dp"
@@ -23,9 +37,9 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/app_bar"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="26dp"
         android:onClick="btnStartsReadPostActivity"
         android:text="ReadPost"
         tools:layout_editor_absoluteX="148dp"
@@ -43,4 +57,19 @@
         android:text="Settings"
         tools:layout_editor_absoluteX="279dp"
         tools:layout_editor_absoluteY="16dp" />
-</RelativeLayout>
+
+    </RelativeLayout>
+    <android.support.design.widget.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:menu="@menu/nav_menu"
+        android:layout_gravity="start">
+
+
+    </android.support.design.widget.NavigationView>
+
+
+
+
+
+</android.support.v4.widget.DrawerLayout>

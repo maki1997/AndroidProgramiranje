@@ -4,5 +4,8 @@
     <string name="like">like</string>
     <string name="dislike">dislike</string>
     <string name="comment">comment</string>
+    <string name="posts">Posts</string>
+    <string name="settings">Settings</string>
+
 
 </resources>

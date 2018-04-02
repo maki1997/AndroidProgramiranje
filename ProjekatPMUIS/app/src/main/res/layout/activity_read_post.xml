@@ -4,17 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.maki.androidprojekat.ReadPostActivity">
+    tools:context="com.example.maki.androidprojekat.ReadPostActivity"
+    android:background="@drawable/wp">
+
+    <include layout="@layout/app_bar"
+        android:id="@+id/app_bar3"/>
+
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="31dp"
-        app:srcCompat="@mipmap/skull"
-        android:contentDescription="@string/image"/>
+        android:layout_alignStart="@+id/nestedScrollView"
+        android:layout_below="@+id/app_bar3"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:contentDescription="@string/image"
+        app:srcCompat="@mipmap/skull" />
 
 
     <android.support.v7.widget.AppCompatTextView
@@ -115,7 +120,7 @@
         android:layout_below="@id/comment"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        >
+        android:id="@+id/nestedScrollView">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
