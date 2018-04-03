@@ -90,6 +90,17 @@
         android:contentDescription="@string/comment"
         android:id="@+id/comment"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post Comment"
+            android:layout_below="@id/comment"
+            android:id="@+id/postComment"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
@@ -121,7 +132,7 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/comment"
+        android:layout_below="@id/postComment"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:id="@+id/nestedScrollView">
