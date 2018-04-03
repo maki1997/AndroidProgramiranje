@@ -101,6 +101,7 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
         }
         if(item.getItemId() == R.id.yes){
             Toast.makeText(this,"Created",Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, PostsActivity.class));
         }
         if(item.getItemId() == R.id.no){
             Toast.makeText(this,"Canceled",Toast.LENGTH_SHORT).show();

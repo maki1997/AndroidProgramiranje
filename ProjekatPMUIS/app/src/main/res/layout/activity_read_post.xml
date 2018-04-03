@@ -22,7 +22,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="18dp"
         android:contentDescription="@string/image"
-        app:srcCompat="@drawable/skull" />
+        app:srcCompat="@drawable/dark" />
 
 
     <android.support.v7.widget.AppCompatTextView
@@ -359,6 +359,7 @@
 
         <ListView
             android:layout_marginTop="130dp"
+            android:background="@drawable/wp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contextClickable="true"
