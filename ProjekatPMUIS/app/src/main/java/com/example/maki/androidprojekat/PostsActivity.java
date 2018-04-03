@@ -47,6 +47,9 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
                     startActivity(new Intent(view.getContext(), PostsActivity.class));
                 }
                 if(position == 1){
+                    startActivity(new Intent(view.getContext(), CreatePostActivity.class));
+                }
+                if(position == 2){
                     startActivity(new Intent(view.getContext(), SettingsActivity.class));
                 }
             }
@@ -98,11 +101,8 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
         if(item.getItemId() == R.id.settings){
             startActivity(new Intent(this, SettingsActivity.class));
         }
-        if(item.getItemId() == R.id.help){
-            Toast.makeText(this,"Help",Toast.LENGTH_SHORT).show();
-        }
-        if(item.getItemId() == R.id.refresh){
-            Toast.makeText(this,"Refresh",Toast.LENGTH_SHORT).show();
+        if(item.getItemId() == R.id.createPost){
+            startActivity(new Intent(this, CreatePostActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

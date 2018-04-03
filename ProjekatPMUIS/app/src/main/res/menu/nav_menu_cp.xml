@@ -12,9 +12,15 @@
         />
 
 
-    <item android:id="@+id/createPost"
-        android:icon="@drawable/create"
-        android:title="@string/create"
+    <item android:id="@+id/yes"
+        android:icon="@drawable/yes"
+        android:title="@string/advance"
+        android:orderInCategory="200"
+        app:showAsAction="ifRoom"/>
+
+    <item android:id="@+id/no"
+        android:icon="@drawable/no"
+        android:title="@string/cancel"
         android:orderInCategory="200"
         app:showAsAction="ifRoom"/>
 

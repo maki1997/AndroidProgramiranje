@@ -39,6 +39,9 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
                     startActivity(new Intent(view.getContext(), PostsActivity.class));
                 }
                 if(position == 1){
+                    startActivity(new Intent(view.getContext(), CreatePostActivity.class));
+                }
+                if(position == 2){
                     startActivity(new Intent(view.getContext(), SettingsActivity.class));
                 }
             }
@@ -79,7 +82,7 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.nav_menu, menu);
+        getMenuInflater().inflate(R.menu.nav_menu_rp, menu);
         return true;
     }
     @Override
@@ -91,11 +94,9 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
         if(item.getItemId() == R.id.settings){
             startActivity(new Intent(this, SettingsActivity.class));
         }
-        if(item.getItemId() == R.id.help){
-            Toast.makeText(this,"Help",Toast.LENGTH_SHORT).show();
-        }
-        if(item.getItemId() == R.id.refresh){
-            Toast.makeText(this,"Refresh",Toast.LENGTH_SHORT).show();
+        if(item.getItemId() == R.id.delete){
+            Toast.makeText(this,"Deleted",Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, PostsActivity.class));
         }
         return super.onOptionsItemSelected(item);
     }

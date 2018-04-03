@@ -3,6 +3,7 @@
 
         <string-array name="nav_drawer">
         <item>Posts</item>
+        <item>Create post</item>
         <item>Settings</item>
         </string-array>
 </resources>
