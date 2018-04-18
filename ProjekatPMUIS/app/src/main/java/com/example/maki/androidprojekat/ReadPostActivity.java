@@ -14,6 +14,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import model.Post;
+import model.User;
+import model.Comment;
+import model.Tag;
 
 public class ReadPostActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -26,11 +30,13 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_post);
+
         Toast.makeText(this,"Welcome to ReadPostActivity",Toast.LENGTH_SHORT).show();
         android.support.v7.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar3);
         setSupportActionBar(toolbar);
         lista=getResources().getStringArray(R.array.nav_drawer);
         listView = (ListView) findViewById(R.id.read_post_list);
+
         listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,lista));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

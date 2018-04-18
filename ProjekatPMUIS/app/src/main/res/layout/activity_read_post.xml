@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/imageButton3"
         android:layout_toRightOf="@id/imageButton3"
-        android:layout_marginStart="190dp"
+        android:layout_marginStart="173dp"
         app:srcCompat="@drawable/dislike" />
 
     <EditText
@@ -107,8 +107,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/app_bar3"
+            android:layout_marginEnd="5dp"
             android:inputType="date"
             android:text="25.09.1997" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/app_bar3"
+            android:text="Smederevo"
+            android:layout_marginStart="5dp"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -127,6 +137,7 @@
         android:layout_below="@id/appCompatTextView"
         android:layout_marginTop="27dp"
         android:layout_alignRight="@id/comment"
+        android:id="@+id/likesRight"
         android:text="20"/>
 
     <android.support.v4.widget.NestedScrollView
