@@ -21,11 +21,10 @@
         android:layout_below="@+id/app_bar3"
         android:layout_marginStart="16dp"
         android:layout_marginTop="18dp"
-        android:contentDescription="@string/image"
-        app:srcCompat="@drawable/dark" />
+        android:contentDescription="@string/image" />
 
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/imageView1"
@@ -33,20 +32,18 @@
         android:layout_marginStart="19dp"
         android:layout_marginEnd="19dp"
         android:layout_toEndOf="@id/imageView1"
-        android:text="title"
         android:id="@+id/appCompatTextView2" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/imageView1"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="19dp"
         android:layout_marginStart="19dp"
-        android:text="description"
         android:id="@+id/appCompatTextView" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/imageView1"
@@ -54,7 +51,6 @@
         android:layout_marginBottom="50dp"
         android:layout_toEndOf="@id/imageView1"
         android:layout_marginStart="19dp"
-        android:text="author"
         android:id="@+id/appCompatTextView3" />
 
 
@@ -127,7 +123,7 @@
         android:layout_toRightOf="@id/imageButton3"
         android:layout_below="@id/appCompatTextView"
         android:layout_marginTop="27dp"
-        android:text="20"/>
+        android:id="@+id/likes"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -137,8 +133,7 @@
         android:layout_below="@id/appCompatTextView"
         android:layout_marginTop="27dp"
         android:layout_alignRight="@id/comment"
-        android:id="@+id/likesRight"
-        android:text="20"/>
+        android:id="@+id/dislikes"/>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -151,10 +146,10 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-            <android.support.v7.widget.AppCompatTextView
+            <TextView
+                android:id="@+id/komentar1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="KOMENTAR 1"/>
+                android:layout_height="wrap_content"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -163,12 +158,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/like" />
-                <android.support.v7.widget.AppCompatTextView
+                <TextView
+                    android:id="@+id/kom1likes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
+                    android:layout_marginTop="8dp"/>
 
             <ImageButton
                 android:contentDescription="@string/like"
@@ -176,184 +171,21 @@
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/dislike" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <TextView
+                    android:id="@+id/kom1dislikes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
+                    android:layout_marginTop="8dp"/>
 
             </LinearLayout>
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="KOMENTAR 2"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageButton
-                    android:contentDescription="@string/like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/like" />
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
 
-                <ImageButton
-                    android:contentDescription="@string/like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/dislike" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
 
-            </LinearLayout>
 
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="KOMENTAR 3"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageButton
-                    android:contentDescription="@string/like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/like" />
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
 
-                <ImageButton
-                    android:contentDescription="@string/like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/dislike" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
-
-            </LinearLayout>
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="KOMENTAR 4"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageButton
-                    android:contentDescription="@string/like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/like" />
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
-
-                <ImageButton
-                    android:contentDescription="@string/like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/dislike" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
-
-            </LinearLayout>
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="KOMENTAR 5"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageButton
-                    android:contentDescription="@string/like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/like" />
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
-
-                <ImageButton
-                    android:contentDescription="@string/like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/dislike" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
-
-            </LinearLayout>
-
-            <android.support.v7.widget.AppCompatTextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="KOMENTAR 6"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageButton
-                    android:contentDescription="@string/like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/like" />
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
-
-                <ImageButton
-                    android:contentDescription="@string/like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/dislike" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"
-                    android:text="20"/>
-
-            </LinearLayout>
 
 
         </LinearLayout>

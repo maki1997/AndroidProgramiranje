@@ -2,17 +2,22 @@ package com.example.maki.androidprojekat;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import model.Post;
 import model.User;
@@ -36,6 +41,24 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
         setSupportActionBar(toolbar);
         lista=getResources().getStringArray(R.array.nav_drawer);
         listView = (ListView) findViewById(R.id.read_post_list);
+        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.dark);
+        User user1 = new User(0,"maki",null,"maki3377","maki3377",null,null);
+        Post post1 = new Post(0,"Naziv","Ovo je neki opis.",bitmap,user1,null,null,null,null,124,66);
+        Comment comment1 = new Comment(0,"kom1","ovo je komentar broj 1",user1,null,post1,36,44);
+        //((AppCompatTextView)findViewById(R.id.likes)).setText(post1.getLikes());
+        ((TextView)findViewById(R.id.appCompatTextView2)).setText(post1.getTitle());
+        ((TextView)findViewById(R.id.appCompatTextView)).setText(post1.getDescription());
+        ((ImageView)findViewById(R.id.imageView1)).setImageBitmap(post1.getPhoto());
+        ((TextView)findViewById(R.id.likes)).setText(String.valueOf(post1.getLikes()));
+        ((TextView)findViewById(R.id.dislikes)).setText(String.valueOf(post1.getDislikes()));
+        ((TextView)findViewById(R.id.appCompatTextView3)).setText(user1.getName());
+        ((TextView)findViewById(R.id.komentar1)).setText(comment1.getDescription());
+        ((TextView)findViewById(R.id.kom1likes)).setText(String.valueOf(comment1.getLikes()));
+        ((TextView)findViewById(R.id.kom1dislikes)).setText(String.valueOf(comment1.getDislikes()));
+
+
+
+
 
         listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,lista));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

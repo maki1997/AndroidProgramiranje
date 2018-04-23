@@ -20,7 +20,20 @@ public class Post {
     private Location location;
     private List<Tag> tags;
     private List<Comment> comments;
+
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "likes=" + likes +
+                '}';
+    }
+
+
+
     private int likes;
+
+
     private int dislikes;
 
     public int getId() {
