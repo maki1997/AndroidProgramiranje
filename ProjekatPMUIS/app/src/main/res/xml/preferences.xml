@@ -5,4 +5,91 @@
     android:layout_height="match_parent"
     >
 
+    <PreferenceCategory
+        android:title="Sort Posts"
+        android:key="settings_sort"
+        >
+
+        <SwitchPreference
+            android:title="@string/sortPostsByDate"
+            android:textSize="25sp"
+            android:key="sort_posts_date"
+            android:defaultValue="true">
+
+        </SwitchPreference>
+        <SwitchPreference
+            android:title="@string/sortPostsByPopularity"
+            android:textSize="25sp"
+            android:key="sort_posts_popularity"
+            android:defaultValue="false">
+
+        </SwitchPreference>
+
+        <SwitchPreference
+            android:title="@string/sortPostsByDateDesc"
+            android:textSize="25sp"
+            android:key="sort_posts_date_desc"
+            android:defaultValue="true">
+
+        </SwitchPreference>
+        <SwitchPreference
+            android:title="@string/sortPostsByPopularityDesc"
+            android:textSize="25sp"
+            android:key="sort_posts_popularity_desc"
+            android:defaultValue="false">
+
+        </SwitchPreference>
+        </PreferenceCategory>
+        <PreferenceCategory
+            android:title="Sort Comments"
+            android:key="comments_sort">
+
+        <SwitchPreference
+            android:title="@string/sortCommentsByDate"
+            android:textSize="25sp"
+            android:key="sort_comments_date"
+            android:defaultValue="false">
+
+        </SwitchPreference>
+        <SwitchPreference
+            android:title="@string/sortCommentsByPopularity"
+            android:textSize="25sp"
+            android:key="sort_comments_popularity"
+            android:defaultValue="false">
+
+        </SwitchPreference>
+
+            <SwitchPreference
+                android:title="@string/sortCommentsByDateDesc"
+                android:textSize="25sp"
+                android:key="sort_comments_date_desc"
+                android:defaultValue="false">
+
+            </SwitchPreference>
+            <SwitchPreference
+                android:title="@string/sortCommentsByPopularityDesc"
+                android:textSize="25sp"
+                android:key="sort_comments_popularity_desc"
+                android:defaultValue="false">
+
+            </SwitchPreference>
+    </PreferenceCategory>
+
+    <!--<PreferenceCategory android:title="Sort">
+        <ListPreference
+            android:key="sort_post"
+            android:title="Sort Posts"
+            android:summary="Choose the way you want to sort your posts."
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+
+        <ListPreference
+            android:key="sort_comm"
+            android:title="Sort Comments"
+            android:summary="Choose the way you want to sort your comments."
+            android:entries="@array/listentries"
+            android:entryValues="@array/listvalues" />
+
+    </PreferenceCategory>-->
+
 </PreferenceScreen>

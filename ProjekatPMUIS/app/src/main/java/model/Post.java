@@ -33,6 +33,7 @@ public class Post {
 
     private int likes;
 
+    public int getPopularity(){return likes-dislikes; }
 
     private int dislikes;
 

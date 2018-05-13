@@ -29,6 +29,7 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
     private DrawerLayout drawerLayout;
     private ListView listView;
     private String[] lista;
+    private String[] postovii;
     private ActionBarDrawerToggle drawerListener;
 
     @Override
@@ -40,26 +41,8 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
         android.support.v7.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar3);
         setSupportActionBar(toolbar);
         lista=getResources().getStringArray(R.array.nav_drawer);
+        postovii=getResources().getStringArray(R.array.posts);
         listView = (ListView) findViewById(R.id.read_post_list);
-        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.dark);
-        User user1 = new User(0,"maki",null,"maki3377","maki3377",null,null);
-        Post post1 = new Post(0,"Naziv","Ovo je neki opis.",bitmap,user1,null,null,null,null,124,66);
-        Comment comment1 = new Comment(0,"kom1","ovo je komentar broj 1",user1,null,post1,36,44);
-        //((AppCompatTextView)findViewById(R.id.likes)).setText(post1.getLikes());
-        ((TextView)findViewById(R.id.appCompatTextView2)).setText(post1.getTitle());
-        ((TextView)findViewById(R.id.appCompatTextView)).setText(post1.getDescription());
-        ((ImageView)findViewById(R.id.imageView1)).setImageBitmap(post1.getPhoto());
-        ((TextView)findViewById(R.id.likes)).setText(String.valueOf(post1.getLikes()));
-        ((TextView)findViewById(R.id.dislikes)).setText(String.valueOf(post1.getDislikes()));
-        ((TextView)findViewById(R.id.appCompatTextView3)).setText(user1.getName());
-        ((TextView)findViewById(R.id.komentar1)).setText(comment1.getDescription());
-        ((TextView)findViewById(R.id.kom1likes)).setText(String.valueOf(comment1.getLikes()));
-        ((TextView)findViewById(R.id.kom1dislikes)).setText(String.valueOf(comment1.getDislikes()));
-
-
-
-
-
         listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,lista));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -71,10 +54,11 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
                     startActivity(new Intent(view.getContext(), CreatePostActivity.class));
                 }
                 if(position == 2){
-                    startActivity(new Intent(view.getContext(), SettingsActivity.class));
+                    startActivity(new Intent(view.getContext(), SettingsAcitivity.class));
                 }
             }
         });
+
 
         drawerLayout =(DrawerLayout) findViewById(R.id.read_post_drawer_layout);
         drawerListener = new ActionBarDrawerToggle(this,drawerLayout,toolbar,
@@ -121,7 +105,7 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
             return  true;
         }
         if(item.getItemId() == R.id.settings){
-            startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SettingsAcitivity.class));
         }
         if(item.getItemId() == R.id.delete){
             Toast.makeText(this,"Deleted",Toast.LENGTH_SHORT).show();

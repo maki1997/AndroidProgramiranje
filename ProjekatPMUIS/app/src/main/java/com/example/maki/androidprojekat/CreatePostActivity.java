@@ -47,7 +47,7 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
                     startActivity(new Intent(view.getContext(), CreatePostActivity.class));
                 }
                 if(position == 2){
-                    startActivity(new Intent(view.getContext(), SettingsActivity.class));
+                    startActivity(new Intent(view.getContext(), SettingsAcitivity.class));
                 }
             }
         });
@@ -97,7 +97,7 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
             return  true;
         }
         if(item.getItemId() == R.id.settings){
-            startActivity(new Intent(this, SettingsActivity.class));
+            startActivity(new Intent(this, SettingsAcitivity.class));
         }
         if(item.getItemId() == R.id.yes){
             Toast.makeText(this,"Created",Toast.LENGTH_SHORT).show();

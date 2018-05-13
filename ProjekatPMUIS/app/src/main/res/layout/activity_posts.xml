@@ -21,43 +21,14 @@
     </include>
 
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button2"
-        android:layout_alignBottom="@+id/button2"
-        android:layout_marginEnd="14dp"
-        android:layout_toStartOf="@+id/button2"
-        android:onClick="btnStartsCreatePostActivity"
-        android:text="CreatePost"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="16dp" />
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="44dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:id="@+id/posts"/>
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/app_bar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="26dp"
-        android:onClick="btnStartsReadPostActivity"
-        android:text="ReadPost"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="16dp" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button2"
-        android:layout_alignBottom="@+id/button2"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="24dp"
-        android:onClick="btnStartsSettingsActivity"
-        android:text="Settings"
-        tools:layout_editor_absoluteX="279dp"
-        tools:layout_editor_absoluteY="16dp" />
 
     </RelativeLayout>
 
@@ -80,6 +51,8 @@
             android:dividerHeight="2dp"
             android:id="@+id/list_view_posts"
             />
+
+
     </android.support.design.widget.NavigationView>
 
 

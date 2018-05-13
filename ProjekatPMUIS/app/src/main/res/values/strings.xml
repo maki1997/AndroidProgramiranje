@@ -14,4 +14,13 @@
     <string name="cancel">cancel</string>
     <string name="advance">advance</string>
     <string name="delete">delete</string>
+    <string name="sort">Sort</string>
+    <string name="sortPostsByDate">sort Posts By Date ASC</string>
+    <string name="sortPostsByPopularity">sort Posts By Popularity ASC</string>
+    <string name="sortCommentsByDate">sort Comments By Date ASC</string>
+    <string name="sortCommentsByPopularity">sort Comments By Popularity ASC</string>
+    <string name="sortPostsByDateDesc">sort Posts By Date DESC</string>
+    <string name="sortPostsByPopularityDesc">sort Posts By Popularity DESC DESC</string>
+    <string name="sortCommentsByDateDesc">sort Comments By Date DESC</string>
+    <string name="sortCommentsByPopularityDesc">sort Comments By Popularity DESC</string>
 </resources>

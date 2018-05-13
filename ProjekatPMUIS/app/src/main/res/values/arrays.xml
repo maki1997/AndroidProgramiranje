@@ -2,8 +2,27 @@
 <resources>
 
         <string-array name="nav_drawer">
-        <item>Posts</item>
-        <item>Create post</item>
-        <item>Settings</item>
+                <item>Posts</item>
+                <item>Create post</item>
+                <item>Settings</item>
+        </string-array>
+
+        <string-array name="posts">
+                <item>post 1</item>
+                <item>post 2 post</item>
+        </string-array>
+
+        <string-array name="listentries">
+                <item>Sort By Date ASC</item>
+                <item>Sort By Date DESC</item>
+                <item>Sort By Popularity ASC</item>
+                <item>Sort By Popularity DESC</item>
+        </string-array>
+
+        <string-array name="listvalues">
+                <item>Sort By Date ASC</item>
+                <item>Sort By Date DESC</item>
+                <item>Sort By Popularity ASC</item>
+                <item>Sort By Popularity DESC</item>
         </string-array>
 </resources>

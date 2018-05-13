@@ -104,8 +104,7 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/app_bar3"
             android:layout_marginEnd="5dp"
-            android:inputType="date"
-            android:text="25.09.1997" />
+            android:inputType="date" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/location"
@@ -113,8 +112,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/app_bar3"
-            android:text="Smederevo"
-            android:layout_marginStart="5dp"/>
+            android:layout_marginStart="5dp" />
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
