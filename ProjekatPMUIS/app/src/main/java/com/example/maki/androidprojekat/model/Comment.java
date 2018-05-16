@@ -1,4 +1,4 @@
-package model;
+package com.example.maki.androidprojekat.model;
 
 import java.util.Date;
 

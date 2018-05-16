@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.maki.androidprojekat.ReadPostActivity"
+    tools:context="com.example.maki.androidprojekat.activites.ReadPostActivity"
     android:background="@drawable/wp"
     android:id="@+id/read_post_drawer_layout">
     <RelativeLayout

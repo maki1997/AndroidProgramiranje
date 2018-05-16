@@ -1,14 +1,17 @@
-package com.example.maki.androidprojekat;
+package com.example.maki.androidprojekat.activites;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.preference.CheckBoxPreference;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,18 +25,21 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
-import Adapters.PostAdapter;
-import model.Comment;
-import model.Post;
-import model.User;
+import com.example.maki.androidprojekat.Adapters.PostAdapter;
+import com.example.maki.androidprojekat.Database.ContentProvider;
+import com.example.maki.androidprojekat.Database.MyDatabaseHelper;
+import com.example.maki.androidprojekat.R;
+import com.example.maki.androidprojekat.model.Comment;
+import com.example.maki.androidprojekat.model.Post;
+import com.example.maki.androidprojekat.model.User;
+import com.example.maki.androidprojekat.util.Util;
 
 @SuppressWarnings("deprecation")
-public class PostsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class PostsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,LoaderManager.LoaderCallbacks<Cursor> {
 
     private DrawerLayout drawerLayout;
     private ListView listView;
@@ -42,6 +48,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
     private ArrayList<Post> posts = new ArrayList<Post>();
     private boolean spbd;
     private boolean spbp;
+    private SimpleCursorAdapter dataAdapter;
 
 
     @Override
@@ -52,6 +59,10 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
 
         android.support.v7.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
+
+        Util.initDB(PostsActivity.this);
+
+        /*displayListView();*/
 
 
         lista = getResources().getStringArray(R.array.nav_drawer);
@@ -139,6 +150,15 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
             });
         }*/
 
+
+
+/*        String[] from = new String[] { MyDatabaseHelper.KEY_TITLE, MyDatabaseHelper.KEY_DATE };
+        int[] to = new int[] {R.id.title_post_list, R.id.date_post_list};
+        adapter = new SimpleCursorAdapter(this, R.layout.posts_list, null, from,
+                to, 0);
+        ListView listView1 = findViewById(R.id.posts);
+        listView1.setAdapter(adapter);*/
+
         PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean postDate = sharedPref.getBoolean("sort_posts_date",true);
@@ -154,6 +174,43 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
 
 
     }
+
+/*    private void displayListView() {
+
+        String[] from = new String[] { MyDatabaseHelper.KEY_TITLE, MyDatabaseHelper.KEY_DATE };
+        int[] to = new int[] {R.id.title_post_list, R.id.date_post_list};
+        dataAdapter = new SimpleCursorAdapter(this, R.layout.posts_list, null, from,
+                to, 0);
+
+
+        // get reference to the ListView
+        ListView listView2 = (ListView) findViewById(R.id.posts);
+        // Assign adapter to ListView
+        listView2.setAdapter(dataAdapter);
+        //Ensures a loader is initialized and active.
+        getSupportLoaderManager().initLoader(0, null,this );
+
+
+        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> listview, View view, int position, long id) {
+
+                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
+
+                String rowId =
+                        cursor.getString(cursor.getColumnIndexOrThrow(MyDatabaseHelper.KEY_ROWID));
+
+                Intent postEdit = new Intent(getBaseContext(), ReadPostActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("mode", "update");
+                bundle.putString("rowId", rowId);
+                postEdit.putExtras(bundle);
+                startActivity(postEdit);
+
+            }
+        });*/
+
+   /* }*/
 
 
 
@@ -240,9 +297,11 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
             });
         }
 
-        PostAdapter pAdapter = new PostAdapter(this, posts);
+        /*PostAdapter pAdapter = new PostAdapter(this, posts);
         ListView listView1 = findViewById(R.id.posts);
-        listView1.setAdapter(pAdapter);
+        listView1.setAdapter(pAdapter);*/
+
+
 
     };
 
@@ -257,7 +316,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onDestroy();
     };
 
-    public void btnStartsCreatePostActivity(View view) {
+/*    public void btnStartsCreatePostActivity(View view) {
         startActivity(new Intent(this, CreatePostActivity.class));
     }
 
@@ -267,7 +326,30 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
 
     public void btnStartsSettingsActivity(View view) {
         startActivity(new Intent(this, SettingsAcitivity.class));
+    }*/
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] allColumns = { MyDatabaseHelper.KEY_ROWID,
+                MyDatabaseHelper.KEY_TITLE, MyDatabaseHelper.KEY_DESCRIPTION, MyDatabaseHelper.KEY_DATE,MyDatabaseHelper.KEY_LOCATION };
+
+        CursorLoader cursor = new CursorLoader(this, ContentProvider.CONTENT_URI_POST,
+                allColumns, null, null, null);
+
+        return cursor;
     }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        dataAdapter.swapCursor(data);
+    }
+
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        dataAdapter.swapCursor(null);
+    }
+
 
 
     @Override

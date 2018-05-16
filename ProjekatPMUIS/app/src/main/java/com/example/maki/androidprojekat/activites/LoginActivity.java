@@ -1,9 +1,11 @@
-package com.example.maki.androidprojekat;
+package com.example.maki.androidprojekat.activites;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import com.example.maki.androidprojekat.R;
 
 public class LoginActivity extends AppCompatActivity {
 

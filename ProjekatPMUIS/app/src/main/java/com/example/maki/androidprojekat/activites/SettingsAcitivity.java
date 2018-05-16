@@ -1,4 +1,4 @@
-package com.example.maki.androidprojekat;
+package com.example.maki.androidprojekat.activites;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -7,6 +7,8 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
+
+import com.example.maki.androidprojekat.R;
 
 /**
  * Created by Maki on 5/13/2018.
@@ -19,7 +21,7 @@ public class SettingsAcitivity extends PreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences,false);
 
         addPreferencesFromResource(R.xml.preferences);
 
