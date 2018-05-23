@@ -1,13 +1,24 @@
 package com.example.maki.androidprojekat.activites;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.maki.androidprojekat.R;
+import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
+import com.example.maki.androidprojekat.model.User;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private EditText et;
+    private HelperDatabaseRead helperDatabaseRead;
+    private ArrayList<User> users = new ArrayList<User>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,9 +49,37 @@ public class LoginActivity extends AppCompatActivity {
         super.onDestroy();
     };
 
-    public void btnStartsPostsActivity(View view) {
-        startActivity(new Intent(this, PostsActivity.class));
-        finish();
+
+    public void btnStartsPostsActivity(View view){
+        et=(EditText)findViewById(R.id.username);
+        String username=et.getText().toString();
+        et=(EditText)findViewById(R.id.pass);
+        String password=et.getText().toString();
+        if(login(username,password) == true){
+            Intent startPosts = new Intent(this,PostsActivity.class);
+            startActivity(startPosts);
+            finish();
+        }else{
+            Toast.makeText(this,"Wrong username and password combination!!!" ,Toast.LENGTH_LONG).show();
+
+        }
+
+    }
+    public boolean login(String user,String pass){
+
+        helperDatabaseRead = new HelperDatabaseRead();
+        users = helperDatabaseRead.loadUsersFromDatabase(this);
+        for(User u:users){
+            if (u.getUsername().equals(user))
+                if (u.getPassword().equals(pass)) {
+                    SharedPreferences pref = getApplicationContext().getSharedPreferences("mPref",0);
+                    SharedPreferences.Editor editor=pref.edit();
+                    editor.putInt("id",u.getId());
+                    editor.apply();
+                    return true;
+                }
+        }
+        return false;
     }
 
 

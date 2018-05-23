@@ -3,15 +3,8 @@ package com.example.maki.androidprojekat.activites;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -22,33 +15,35 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 import com.example.maki.androidprojekat.Adapters.PostAdapter;
-import com.example.maki.androidprojekat.Database.ContentProvider;
-import com.example.maki.androidprojekat.Database.MyDatabaseHelper;
 import com.example.maki.androidprojekat.R;
-import com.example.maki.androidprojekat.model.Comment;
+import com.example.maki.androidprojekat.Database.DatabaseHelper;
+import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
 import com.example.maki.androidprojekat.model.Post;
 import com.example.maki.androidprojekat.model.User;
-import com.example.maki.androidprojekat.util.Util;
+
+import org.w3c.dom.Text;
 
 @SuppressWarnings("deprecation")
-public class PostsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,LoaderManager.LoaderCallbacks<Cursor> {
+public class PostsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private DrawerLayout drawerLayout;
     private ListView listView;
     private String[] lista;
     private ActionBarDrawerToggle drawerListener;
     private ArrayList<Post> posts = new ArrayList<Post>();
-    private boolean spbd;
-    private boolean spbp;
-    private SimpleCursorAdapter dataAdapter;
+    private HelperDatabaseRead helperDatabaseRead;
+    private DatabaseHelper mDbHelper;
+    private TextView usernameND;
+    private TextView nameND;
+    int idUser = -1;
 
 
     @Override
@@ -60,9 +55,10 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
         android.support.v7.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
 
-        Util.initDB(PostsActivity.this);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("mPref",0);
+        idUser = pref.getInt("id",-1);
 
-        /*displayListView();*/
+
 
 
         lista = getResources().getStringArray(R.array.nav_drawer);
@@ -80,6 +76,10 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
                 if (position == 2) {
                     startActivity(new Intent(view.getContext(), SettingsAcitivity.class));
                 }
+                if (position == 3) {
+                    startActivity(new Intent(view.getContext(), LoginActivity.class));
+                    finish();
+                }
             }
 
 
@@ -91,6 +91,16 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
                 R.string.openNavDrawer, R.string.closeNavDrawer) {
             @Override
             public void onDrawerOpened(View drawerView) {
+                usernameND = (TextView) findViewById(R.id.usernameDrawer);
+                nameND = (TextView) findViewById(R.id.nameDrawer);
+                User u=null;
+                for(User uu:helperDatabaseRead.loadUsersFromDatabase(PostsActivity.this)){
+                    if(uu.getId() == idUser){
+                        u=uu;
+                    }
+                }
+                usernameND.setText(u.getUsername());
+                nameND.setText(u.getName());
                 Toast.makeText(PostsActivity.this, "Drawer Opened", Toast.LENGTH_SHORT).show();
             }
 
@@ -104,7 +114,17 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.dark);
+        helperDatabaseRead = new HelperDatabaseRead();
+        User u=null;
+        for(User usser :helperDatabaseRead.loadUsersFromDatabase(this)){
+            if(usser.getId() == 1){
+                u=usser;
+            }
+        }
+
+
+
+        /*Bitmap bitmap = BitmapFactory.decodeResource(this.getResources(),R.drawable.dark);
         Bitmap bitmap1 = BitmapFactory.decodeResource(this.getResources(),R.drawable.skull);
         Bitmap bitmap2 = BitmapFactory.decodeResource(this.getResources(),R.drawable.app);
         User user1 = new User(0,"maki",null,"maki3377","maki3377",null,null);
@@ -114,50 +134,25 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
         Comment comment1 = new Comment(0,"kom1","ovo je komentar broj 1",user1,null,post1,36,44);
         posts.add(post1);
         posts.add(post2);
-        posts.add(post3);
+        posts.add(post3);*/
+        posts = helperDatabaseRead.loadPostsFromDatabase(this);
         PostAdapter pAdapter = new PostAdapter(this, posts);
         ListView listView1 = findViewById(R.id.posts);
         listView1.setAdapter(pAdapter);
         listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(PostsActivity.this, ReadPostActivity.class);
+                Intent intent = new Intent(PostsActivity.this,ReadPostActivity.class);
+                intent.putExtra("id",i+1);
                 startActivity(intent);
             }
 
         });
 
-        /*SharedPreferences spf = PreferenceManager.getDefaultSharedPreferences(this);
-        spbd = spf.getBoolean("sortDate",true);
-        spbp = spf.getBoolean("sortPop",true);
-        if(spbd== true){
-            Collections.sort(posts, new Comparator<Post>() {
-                @Override
-                public int compare(Post post, Post t1) {
-                    return post.getDate().compareTo(t1.getDate()) ;
-                }
-            });
-        }
-
-        if(spbp == true){
-            Collections.sort(posts, new Comparator< Post >() {
-                @Override
-                public int compare(Post post, Post t1) {
-                    return   post.getPopularity() - t1.getPopularity();
-                }
-
-
-            });
-        }*/
 
 
 
-/*        String[] from = new String[] { MyDatabaseHelper.KEY_TITLE, MyDatabaseHelper.KEY_DATE };
-        int[] to = new int[] {R.id.title_post_list, R.id.date_post_list};
-        adapter = new SimpleCursorAdapter(this, R.layout.posts_list, null, from,
-                to, 0);
-        ListView listView1 = findViewById(R.id.posts);
-        listView1.setAdapter(adapter);*/
+
 
         PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -175,42 +170,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-/*    private void displayListView() {
 
-        String[] from = new String[] { MyDatabaseHelper.KEY_TITLE, MyDatabaseHelper.KEY_DATE };
-        int[] to = new int[] {R.id.title_post_list, R.id.date_post_list};
-        dataAdapter = new SimpleCursorAdapter(this, R.layout.posts_list, null, from,
-                to, 0);
-
-
-        // get reference to the ListView
-        ListView listView2 = (ListView) findViewById(R.id.posts);
-        // Assign adapter to ListView
-        listView2.setAdapter(dataAdapter);
-        //Ensures a loader is initialized and active.
-        getSupportLoaderManager().initLoader(0, null,this );
-
-
-        listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> listview, View view, int position, long id) {
-
-                Cursor cursor = (Cursor) listView.getItemAtPosition(position);
-
-                String rowId =
-                        cursor.getString(cursor.getColumnIndexOrThrow(MyDatabaseHelper.KEY_ROWID));
-
-                Intent postEdit = new Intent(getBaseContext(), ReadPostActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("mode", "update");
-                bundle.putString("rowId", rowId);
-                postEdit.putExtras(bundle);
-                startActivity(postEdit);
-
-            }
-        });*/
-
-   /* }*/
 
 
 
@@ -275,7 +235,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
             Collections.sort(posts, new Comparator<Post>() {
                 @Override
                 public int compare(Post o1, Post o2) {
-                    return Integer.valueOf(o1.getPopularity()).compareTo(o2.getPopularity());
+                    return Integer.valueOf(o1.getLikes()-o1.getDislikes()).compareTo(o2.getLikes()-o2.getDislikes());
                 }
             });
         }
@@ -292,7 +252,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
             Collections.sort(posts, new Comparator<Post>() {
                 @Override
                 public int compare(Post o1, Post o2) {
-                    return Integer.valueOf(o2.getPopularity()).compareTo(o1.getPopularity());
+                    return Integer.valueOf(o2.getLikes()-o2.getDislikes()).compareTo(o1.getLikes()-o1.getDislikes());
                 }
             });
         }
@@ -328,27 +288,6 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
         startActivity(new Intent(this, SettingsAcitivity.class));
     }*/
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] allColumns = { MyDatabaseHelper.KEY_ROWID,
-                MyDatabaseHelper.KEY_TITLE, MyDatabaseHelper.KEY_DESCRIPTION, MyDatabaseHelper.KEY_DATE,MyDatabaseHelper.KEY_LOCATION };
-
-        CursorLoader cursor = new CursorLoader(this, ContentProvider.CONTENT_URI_POST,
-                allColumns, null, null, null);
-
-        return cursor;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        dataAdapter.swapCursor(data);
-    }
-
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        dataAdapter.swapCursor(null);
-    }
 
 
 
@@ -381,7 +320,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
         Collections.sort(posts, new Comparator< Post >() {
             @Override
             public int compare(Post post, Post t1) {
-                return   post.getPopularity() - t1.getPopularity();
+                return   post.getLikes()-post.getDislikes() - t1.getLikes()-t1.getDislikes();
             }
 
 

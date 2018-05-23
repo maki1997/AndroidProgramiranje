@@ -12,10 +12,34 @@ public class Comment {
     private String description;
     private User author;
     private Date date;
-    private Post post;
+    private int post;
     private int likes;
     private int dislikes;
 
+    public Comment(){}
+
+    public Comment(int id, String title, String description, User author, Date date, int post, int likes, int dislikes) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.author = author;
+        this.date = date;
+        this.post = post;
+        this.likes = likes;
+        this.dislikes = dislikes;
+
+    }
+    public Comment( String title, String description, User author, Date date, int post, int likes, int dislikes) {
+
+        this.title = title;
+        this.description = description;
+        this.author = author;
+        this.date = date;
+        this.post = post;
+        this.likes = likes;
+        this.dislikes = dislikes;
+
+    }
     public int getId() {
         return id;
     }
@@ -56,11 +80,11 @@ public class Comment {
         this.date = date;
     }
 
-    public Post getPost() {
+    public int getPost() {
         return post;
     }
 
-    public void setPost(Post post) {
+    public void setPost(int post) {
         this.post = post;
     }
 
@@ -80,15 +104,5 @@ public class Comment {
         this.dislikes = dislikes;
     }
 
-    public Comment(int id, String title, String description, User author, Date date, Post post, int likes, int dislikes) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.author = author;
-        this.date = date;
-        this.post = post;
-        this.likes = likes;
-        this.dislikes = dislikes;
-    }
-// private Status status;
+
 }

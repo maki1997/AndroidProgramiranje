@@ -1,6 +1,7 @@
 package com.example.maki.androidprojekat.activites;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,10 +13,21 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.maki.androidprojekat.R;
+import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
+import com.example.maki.androidprojekat.model.Post;
+import com.example.maki.androidprojekat.model.User;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 @SuppressWarnings("ConstantConditions")
 
@@ -24,11 +36,18 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
     private ListView listView;
     private String[] lista;
     private ActionBarDrawerToggle drawerListener;
+    int idUser = -1;
+    private EditText textView;
+    private HelperDatabaseRead helperDatabaseRead;
+    private TextView usernameND;
+    private TextView nameND;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("mPref",0);
+        idUser = pref.getInt("id",-1);
         Toast.makeText(this,"Welcome to CreatePostActivity",Toast.LENGTH_SHORT).show();
         android.support.v7.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar1);
         setSupportActionBar(toolbar);
@@ -47,14 +66,30 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
                 if(position == 2){
                     startActivity(new Intent(view.getContext(), SettingsAcitivity.class));
                 }
+                if (position == 3) {
+                    startActivity(new Intent(view.getContext(), LoginActivity.class));
+                    finish();
+                }
             }
         });
+
+
 
         drawerLayout =(DrawerLayout) findViewById(R.id.create_post_drawer_layout);
         drawerListener = new ActionBarDrawerToggle(this,drawerLayout,toolbar,
                 R.string.openNavDrawer,R.string.closeNavDrawer){
             @Override
             public void onDrawerOpened(View drawerView) {
+                /*usernameND = (TextView) findViewById(R.id.usernameDrawer);
+                nameND = (TextView) findViewById(R.id.nameDrawer);
+                User u=null;
+                for(User uu:helperDatabaseRead.loadUsersFromDatabase(CreatePostActivity.this)){
+                    if(uu.getId() == idUser){
+                        u=uu;
+                    }
+                }
+                usernameND.setText(u.getUsername());
+                nameND.setText(u.getName());*/
                 Toast.makeText(CreatePostActivity.this,"Drawer Opened",Toast.LENGTH_SHORT).show();
             }
 
@@ -69,7 +104,18 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+
+
+
+
+
+
+
+
+
     }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -98,6 +144,7 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
             startActivity(new Intent(this, SettingsAcitivity.class));
         }
         if(item.getItemId() == R.id.yes){
+            createPost();
             Toast.makeText(this,"Created",Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, PostsActivity.class));
         }
@@ -148,6 +195,42 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
     public void setTitle(String title){
         getSupportActionBar().setTitle(title);
 
+    }
+
+    public void createPost(){
+        helperDatabaseRead = new HelperDatabaseRead();
+        textView=(EditText) findViewById(R.id.titleCP);
+        String title=textView.getText().toString();
+        textView=(EditText)findViewById(R.id.descriptionCP);
+        String desc=textView.getText().toString();
+        textView=(EditText)findViewById(R.id.tagsCp);
+        String tag=textView.getText().toString();
+        User u=null;
+        for(User uu:helperDatabaseRead.loadUsersFromDatabase(this)){
+            if(uu.getId() == idUser){
+                u=uu;
+            }
+        }
+        Post p =new Post(title,desc,null,u,getDateTime(),"gaga",null,null,0,0);
+        helperDatabaseRead.insertPost(p,this);
+    }
+    private Date getDateTime(){
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        Date date = new Date();
+        String sDate= dateFormat.format(date);
+        Toast.makeText(this,sDate,Toast.LENGTH_SHORT).show();
+        return  convertStringToDate(sDate);
+    }
+    public Date convertStringToDate(String dtStart){
+
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        try {
+            Date date = format.parse(dtStart);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

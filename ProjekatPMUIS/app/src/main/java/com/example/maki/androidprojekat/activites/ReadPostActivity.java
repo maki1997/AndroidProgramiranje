@@ -1,6 +1,7 @@
 package com.example.maki.androidprojekat.activites;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,10 +13,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.maki.androidprojekat.Adapters.CommentAdapter;
 import com.example.maki.androidprojekat.R;
+import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
+import com.example.maki.androidprojekat.model.Comment;
+import com.example.maki.androidprojekat.model.Post;
+import com.example.maki.androidprojekat.model.Tag;
+import com.example.maki.androidprojekat.model.User;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class ReadPostActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -24,11 +40,23 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
     private String[] lista;
     private String[] postovii;
     private ActionBarDrawerToggle drawerListener;
+    private HelperDatabaseRead helperDatabaseRead;
+    private ArrayList<Post> posts = new ArrayList<Post>();
+    private Post post=null;
+    private TextView textView;
+    private TextView dateView;
+    private int idUser;
+    private int id;
+    private TextView usernameND;
+    private TextView nameND;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_read_post);
+
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("mPref",0);
+        idUser = pref.getInt("id",-1);
 
         Toast.makeText(this,"Welcome to ReadPostActivity",Toast.LENGTH_SHORT).show();
         android.support.v7.widget.Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar3);
@@ -49,6 +77,10 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
                 if(position == 2){
                     startActivity(new Intent(view.getContext(), SettingsAcitivity.class));
                 }
+                if (position == 3) {
+                    startActivity(new Intent(view.getContext(), LoginActivity.class));
+                    finish();
+                }
             }
         });
 
@@ -58,6 +90,16 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
                 R.string.openNavDrawer,R.string.closeNavDrawer){
             @Override
             public void onDrawerOpened(View drawerView) {
+                usernameND = (TextView) findViewById(R.id.usernameDrawer);
+                nameND = (TextView) findViewById(R.id.nameDrawer);
+                User u=null;
+                for(User uu:helperDatabaseRead.loadUsersFromDatabase(ReadPostActivity.this)){
+                    if(uu.getId() == idUser){
+                        u=uu;
+                    }
+                }
+                usernameND.setText(u.getUsername());
+                nameND.setText(u.getName());
                 Toast.makeText(ReadPostActivity.this,"Drawer Opened",Toast.LENGTH_SHORT).show();
             }
 
@@ -71,6 +113,56 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
         drawerLayout.setDrawerListener(drawerListener);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Post p=null;
+        Intent myIntent = getIntent();
+        id= myIntent.getIntExtra("id",-1);
+        helperDatabaseRead = new HelperDatabaseRead();
+        posts=helperDatabaseRead.loadPostsFromDatabase(this);
+        if(id != -1){
+            for(Post pp: posts){
+                if(pp.getId() == id){
+                    post = pp;
+                }
+            }
+        }
+        textView=(TextView)findViewById(R.id.titleRP);
+        textView.setText(post.getTitle());
+        textView=(TextView)findViewById(R.id.authorRP);
+        textView.setText(post.getAuthor().getName());
+        textView=(TextView)findViewById(R.id.descRP);
+        textView.setText(post.getDescription());
+        textView=(TextView)findViewById(R.id.tagRP);
+        List<Tag> tags=post.getTags();
+        String tag="";
+        int size= -1;
+        if(post.getTags() == null){
+            size=0;
+        }else{
+            size=post.getTags().size();
+        }
+        for(int i =0 ;i< size;i++){
+            tag=tag+ ", "+tags.get(i).getName();
+            textView.setText(tag);
+        }
+        textView=(TextView)findViewById(R.id.likes);
+        String like= String.valueOf(post.getLikes());
+        textView.setText(like);
+        textView=(TextView)findViewById(R.id.dislikes);
+        String disslike= String.valueOf(post.getDislikes());
+        textView.setText(disslike);
+        textView=(TextView)findViewById(R.id.date);
+        String date = new SimpleDateFormat("dd.MM.yyyy").format(post.getDate());
+        textView.setText(date);
+        ArrayList<Comment> mComm=new ArrayList<Comment>();
+        for(Comment c:helperDatabaseRead.loadCommentsFromDatabase(this)){
+            if(c.getPost() == post.getId())
+                mComm.add(c);
+        }
+        CommentAdapter commentAdapter=new CommentAdapter(this,mComm);
+        ListView listView = findViewById(R.id.readpost_list_view_comment);
+        listView.setAdapter(commentAdapter);
+
 
     }
 
@@ -116,6 +208,42 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
     };
 
     protected void onResume(){
+
+        ArrayList<Comment> mComm=new ArrayList<Comment>();
+        for(Comment c:helperDatabaseRead.loadCommentsFromDatabase(this)){
+            if(c.getPost() == post.getId())
+                mComm.add(c);
+        }
+        CommentAdapter commentAdapter=new CommentAdapter(this,mComm);
+        ListView listView = findViewById(R.id.readpost_list_view_comment);
+        listView.setAdapter(commentAdapter);
+        helperDatabaseRead = new HelperDatabaseRead();
+
+        Button b = (Button) findViewById(R.id.postComment);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                textView=(TextView)findViewById(R.id.titleComm);
+                String title=textView.getText().toString();
+                textView=(TextView)findViewById(R.id.comment);
+                String desc=textView.getText().toString();
+                dateView = (TextView) findViewById(R.id.dateComm);
+                String date =dateView.getText().toString();
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("mPref",0);
+                idUser = pref.getInt("id",-1);
+                User u=null;
+                for(User uu:helperDatabaseRead.loadUsersFromDatabase(ReadPostActivity.this)){
+                    if(uu.getId() == idUser){
+                        u=uu;
+                    }
+                }
+                Comment c= new Comment(title,desc,u,getDateTime(),id,0,0);
+                helperDatabaseRead.insertComment(c,ReadPostActivity.this);
+
+            }
+        });
+
         super.onResume();
     };
 
@@ -146,6 +274,25 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
     public void setTitle(String title){
         getSupportActionBar().setTitle(title);
 
+    }
+
+    private Date getDateTime(){
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        Date date = new Date();
+        String sDate= dateFormat.format(date);
+        Toast.makeText(this,sDate,Toast.LENGTH_SHORT).show();
+        return  convertStringToDate(sDate);
+    }
+    public Date convertStringToDate(String dtStart){
+
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        try {
+            Date date = format.parse(dtStart);
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

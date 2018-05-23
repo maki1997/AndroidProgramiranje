@@ -17,25 +17,55 @@ public class Post {
     private Bitmap photo;
     private User author;
     private Date date;
-    private Location location;
+    private String location;
     private List<Tag> tags;
     private List<Comment> comments;
+    private int likes;
+    private int dislikes;
 
-
-    @Override
-    public String toString() {
-        return "Post{" +
-                "likes=" + likes +
-                '}';
+    public Post(){
     }
 
 
+    public Post(String title, String description, Date date) {
+        this.title = title;
+        this.description = description;
+        this.date = date;
+    }
+    public Post(int id, String title, String description, Date date) {
+        this.title = title;
+        this.description = description;
+        this.date = date;
+    }
 
-    private int likes;
+    public Post(int id, String title, String description, Bitmap photo,
+                User author, Date date, String location, List<Tag> tags, List<Comment> comments, int likes, int dislikes) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.photo = photo;
+        this.author = author;
+        this.date = date;
+        this.location = location;
+        this.tags = tags;
+        this.comments = comments;
+        this.likes = likes;
+        this.dislikes = dislikes;
+    }
+    public Post( String title, String description, Bitmap photo,
+                 User author, Date date, String location, List<Tag> tags, List<Comment> comments, int likes, int dislikes) {
 
-    public int getPopularity(){return likes-dislikes; }
-
-    private int dislikes;
+        this.title = title;
+        this.description = description;
+        this.photo = photo;
+        this.author = author;
+        this.date = date;
+        this.location = location;
+        this.tags = tags;
+        this.comments = comments;
+        this.likes = likes;
+        this.dislikes = dislikes;
+    }
 
     public int getId() {
         return id;
@@ -85,11 +115,11 @@ public class Post {
         this.date = date;
     }
 
-    public Location getLocation() {
+    public String getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(String location) {
         this.location = location;
     }
 
@@ -122,20 +152,6 @@ public class Post {
     }
 
     public void setDislikes(int dislikes) {
-        this.dislikes = dislikes;
-    }
-
-    public Post(int id, String title, String description, Bitmap photo, User author, Date date, Location location, List<Tag> tags, List<Comment> comments, int likes, int dislikes) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.photo = photo;
-        this.author = author;
-        this.date = date;
-        this.location = location;
-        this.tags = tags;
-        this.comments = comments;
-        this.likes = likes;
         this.dislikes = dislikes;
     }
 }

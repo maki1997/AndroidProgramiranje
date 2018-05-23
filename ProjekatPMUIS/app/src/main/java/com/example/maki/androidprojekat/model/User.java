@@ -17,6 +17,26 @@ public class User {
     private List<Post> posts;
     private List<Comment> comments;
 
+    public User() {
+    }
+
+    public User(int id, String name, Bitmap photo, String username, String password){
+        this.id = id;
+        this.name = name;
+        this.photo = photo;
+        this.username = username;
+        this.password = password;
+    }
+    public User(int id, String name, Bitmap photo, String username, String password, List<Post> posts, List<Comment> comments) {
+        this.id = id;
+        this.name = name;
+        this.photo = photo;
+        this.username = username;
+        this.password = password;
+        this.posts = posts;
+        this.comments = comments;
+    }
+
     public int getId() {
         return id;
     }
@@ -75,16 +95,4 @@ public class User {
 
 
 
-    public User(int id, String name, Bitmap photo, String username, String password, List<Post> posts, List<Comment> comments) {
-        this.id = id;
-        this.name = name;
-        this.photo = photo;
-        this.username = username;
-        this.password = password;
-        this.posts = posts;
-        this.comments = comments;
-    }
-
-
 }
-

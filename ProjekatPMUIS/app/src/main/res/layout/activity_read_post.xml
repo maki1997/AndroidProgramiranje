@@ -7,6 +7,9 @@
     tools:context="com.example.maki.androidprojekat.activites.ReadPostActivity"
     android:background="@drawable/wp"
     android:id="@+id/read_post_drawer_layout">
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -17,7 +20,7 @@
         android:id="@+id/imageView1"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_alignStart="@+id/nestedScrollView"
+        android:layout_alignStart="@+id/commenstRP"
         android:layout_below="@+id/app_bar3"
         android:layout_marginStart="16dp"
         android:layout_marginTop="18dp"
@@ -32,7 +35,7 @@
         android:layout_marginStart="19dp"
         android:layout_marginEnd="19dp"
         android:layout_toEndOf="@id/imageView1"
-        android:id="@+id/appCompatTextView2" />
+        android:id="@+id/titleRP" />
 
     <TextView
         android:layout_width="match_parent"
@@ -41,7 +44,16 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="19dp"
         android:layout_marginStart="19dp"
-        android:id="@+id/appCompatTextView" />
+        android:id="@+id/descRP" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/descRP"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="19dp"
+            android:layout_marginStart="19dp"
+            android:id="@+id/tagRP" />
 
     <TextView
         android:layout_width="match_parent"
@@ -51,40 +63,68 @@
         android:layout_marginBottom="50dp"
         android:layout_toEndOf="@id/imageView1"
         android:layout_marginStart="19dp"
-        android:id="@+id/appCompatTextView3" />
+        android:id="@+id/authorRP" />
 
 
     <ImageButton
-        android:id="@+id/imageButton3"
+        android:id="@+id/imgLike"
         android:contentDescription="@string/like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/imageView1"
-        android:layout_below="@id/appCompatTextView"
+        android:layout_below="@id/tagRP"
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         app:srcCompat="@drawable/like" />
 
     <ImageButton
         android:contentDescription="@string/dislike"
-        android:id="@+id/imageButton4"
+        android:id="@+id/imgDislike"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageButton3"
-        android:layout_toRightOf="@id/imageButton3"
+        android:layout_alignBottom="@+id/imgLike"
+        android:layout_toRightOf="@id/imgLike"
         android:layout_marginStart="173dp"
         app:srcCompat="@drawable/dislike" />
+
+        <TextView
+            android:id="@+id/likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/dislikes"
+            android:layout_alignBottom="@+id/dislikes"
+            android:layout_toEndOf="@+id/imageView1" />
+
+        <TextView
+            android:id="@+id/dislikes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imgDislike"
+            android:layout_alignEnd="@+id/commenstRP"
+            android:layout_marginBottom="11dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgLike"
+            android:hint="Title..."
+            android:layout_marginStart="100dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginTop="19dp"
+            android:contentDescription="@string/comment"
+            android:id="@+id/titleComm" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/imageButton3"
+        android:layout_below="@id/titleComm"
         android:hint="Type in you comment..."
         android:layout_marginStart="19dp"
         android:layout_marginEnd="19dp"
         android:layout_marginTop="19dp"
         android:contentDescription="@string/comment"
-        android:id="@+id/comment"/>
+        android:id="@+id/comment"
+        />
 
         <Button
             android:layout_width="wrap_content"
@@ -97,7 +137,7 @@
             android:layout_marginBottom="10dp"/>
 
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,7 +146,7 @@
             android:layout_marginEnd="5dp"
             android:inputType="date" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <TextView
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -114,24 +154,7 @@
             android:layout_below="@+id/app_bar3"
             android:layout_marginStart="5dp" />
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:layout_toRightOf="@id/imageButton3"
-        android:layout_below="@id/appCompatTextView"
-        android:layout_marginTop="27dp"
-        android:id="@+id/likes"/>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:layout_toLeftOf="@id/imageButton4"
-        android:layout_below="@id/appCompatTextView"
-        android:layout_marginTop="27dp"
-        android:layout_alignRight="@id/comment"
-        android:id="@+id/dislikes"/>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -139,58 +162,17 @@
         android:layout_below="@id/postComment"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:id="@+id/nestedScrollView">
-        <LinearLayout
+        android:id="@+id/commenstRP">
+        <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/komentar1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            <ImageButton
-                android:contentDescription="@string/like"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/like" />
-                <TextView
-                    android:id="@+id/kom1likes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"/>
+            android:id="@+id/readpost_list_view_comment">
 
-            <ImageButton
-                android:contentDescription="@string/like"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@drawable/dislike" />
-
-                <TextView
-                    android:id="@+id/kom1dislikes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp"/>
-
-            </LinearLayout>
-
-
-
-
-
-
-
-
-
-        </LinearLayout>
-
+        </ListView>
 
     </android.support.v4.widget.NestedScrollView>
     </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.NavigationView
         android:layout_width="wrap_content"

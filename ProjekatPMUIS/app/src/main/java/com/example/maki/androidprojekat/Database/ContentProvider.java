@@ -1,292 +1,262 @@
 package com.example.maki.androidprojekat.Database;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-
-/**
- * Created by Maki on 5/14/2018.
- */
+import android.util.Log;
+import android.widget.Toast;
 
 public class ContentProvider extends android.content.ContentProvider {
 
-    /*private MyDatabaseHelper dbHelper;
+    public static final String LOG_TAG = ContentProvider.class.getSimpleName();
+    /**
+     * URI matcher code for the whole Users table
+     */
+    private static final int USERS = 100;
+    /**
+     * URI matcher code for a single User
+     */
+    private static final int USER_ID = 101;
 
-    private static final int ALL_POSTS = 1;
-    private static final int SINGLE_POST = 2;
+    /**
+     * URI matcher for the whole Comments table
+     */
+    private static final int COMMENTS = 200;
 
-    private static final String AUTHORITY = "com.example.maki.androidprojekat.Database.ContentProvider";
+    /**
+     * URI matcher for a single COMMENT
+     */
+    private static final int COMMENT_ID = 201;
 
-    private static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/posts");
+    /**
+     * URI matcher for the whole Tags table
+     */
+    private static final int TAGS = 300;
 
-    private static final UriMatcher uriMatcher;
-    static{
-        uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(AUTHORITY,"posts",ALL_POSTS);
-        uriMatcher.addURI(AUTHORITY,"posts/#",SINGLE_POST);
+    /**
+     * URI matcher for a single TAG
+     */
+    private static final int TAG_ID = 301;
+
+    /**
+     * URI matcher for the whole Posts table
+     */
+    private static final int POSTS = 400;
+
+    /**
+     * URI matcher for a single POST
+     */
+    private static final int POST_ID = 401;
+
+    /**
+     * Root URI
+     */
+    public static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+    static {
+        sUriMatcher.addURI(UserContract.CONTENT_AUTHORITY, UserContract.PATH_USER, USERS);
+        sUriMatcher.addURI(UserContract.CONTENT_AUTHORITY, UserContract.PATH_USER + "/#", USER_ID);
+
+        sUriMatcher.addURI(CommentContract.CONTENT_AUTHORITY, CommentContract.PATH_COMMENT, COMMENTS);
+        sUriMatcher.addURI(CommentContract.CONTENT_AUTHORITY, CommentContract.PATH_COMMENT + "/#", COMMENT_ID);
+
+
+        sUriMatcher.addURI(TagContract.CONTENT_AUTHORITY, TagContract.PATH_TAG, TAGS);
+        sUriMatcher.addURI(TagContract.CONTENT_AUTHORITY, TagContract.PATH_TAG + "/#", TAG_ID);
+
+        sUriMatcher.addURI(PostContract.CONTENT_AUTHORITY, PostContract.PATH_POST, POSTS);
+        sUriMatcher.addURI(PostContract.CONTENT_AUTHORITY, PostContract.PATH_POST + "/#", POST_ID);
     }
 
+    Context context = getContext();
+    private DatabaseHelper mDbHelper;
+    public SQLiteOpenHelper openHelper;
+    private SQLiteDatabase database;
 
+    /**
+     * Open the database connection
+     *
+     * @return
+     */
+    public void open() {
 
+        this.database = openHelper.getWritableDatabase();
+    }
 
-
+    /**
+     * Close the database connection
+     *
+     * @return
+     */
+    public void close() {
+        if (database != null) {
+            this.database.close();
+        }
+    }
 
     @Override
     public boolean onCreate() {
-        dbHelper = new MyDatabaseHelper(getContext());
-        return false;
+        Log.e("blabla", "blabla");
+        mDbHelper = DatabaseHelper.getInstance(getContext());
+
+        return true;
     }
 
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-        queryBuilder.setTables(PostDb.SQLITE_TABLE);
+        Log.e("blabla", "blabla");
+       // SQLiteOpenHelper openHelper = DatabaseHelper.getInstance(getContext());
+       // SQLiteDatabase database = openHelper.getWritableDatabase();
+        this.openHelper =  DatabaseHelper.getInstance(getContext());
+       open();
+        //Cursor
+        Cursor cursor = null;
+        // Match the correct URI
+        int match = sUriMatcher.match(uri);
+        switch (match) {
+           case COMMENTS:
+                // This will return all comments with the given projection, selection, selection arguments and sort order.
+               cursor = database.query(CommentContract.CommentEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+                break;
 
-        switch(uriMatcher.match(uri)){
-            case ALL_POSTS:
+            case USERS:
+                // This will return all users with the given projection, selection, selection arguments and sort order.
+                cursor = database.query(UserContract.UserEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
                 break;
-            case SINGLE_POST:
-                String id = uri.getPathSegments().get(1);
-                queryBuilder.appendWhere(PostDb.KEY_ROWID + "=" + id);
+
+            case TAGS:
+                // This will return all tags with the given projection, selection, selection arguments and sort order.
+                cursor = database.query(TagContract.TagEntry.TABLE_NAME, projection, selection,selectionArgs, null, null, sortOrder);
                 break;
-            default:
-                throw new IllegalArgumentException("Unsupported URI: " + uri);
+
+            case POSTS:
+                   Log.e("blabla", "blabla");
+                // This will return all posts with the given projection, selection, selection arguments and sort order.
+                cursor = database.query(PostContract.PostEntry.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+                break;
+
+           default:
+                   throw new IllegalArgumentException("Cannot query unknown URI" + uri);
         }
-        Cursor cursor = queryBuilder.query(db, projection, selection,
-                selectionArgs, null, null, sortOrder);
+        //close();
         return cursor;
     }
 
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
-        switch (uriMatcher.match(uri)){
-            case ALL_POSTS:
-                return "vnd.android.cursor.dir/com.example.maki.androidprojekat.Database.ContentProvider.posts";
-            case SINGLE_POST:
-                return "vnd.android.cursor.item/com.example.maki.androidprojekat.Database.ContentProvider.posts";
-            default:
-                throw new IllegalArgumentException("Unsupported URI " +uri);
-        }
-
-    }
-
-    @Nullable
-    @Override
-    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        switch (uriMatcher.match(uri)){
-            case ALL_POSTS:
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported URI " +uri);
-
-        }
-        long id = db.insert(PostDb.SQLITE_TABLE, null, values);
-        getContext().getContentResolver().notifyChange(uri,null);
-        return Uri.parse(CONTENT_URI + "/" + id);
-    }
-
-    @Override
-    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        switch (uriMatcher.match(uri)) {
-            case ALL_POSTS:
-                break;
-            case SINGLE_POST:
-                String id = uri.getPathSegments().get(1);
-                selection = PostDb.KEY_ROWID + "=" + id
-                        + (!TextUtils.isEmpty(selection) ?
-                        " AND (" + selection + ')' : "");
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported URI: " + uri);
-        }
-        int deleteCount = db.delete(PostDb.SQLITE_TABLE, selection, selectionArgs);
-        getContext().getContentResolver().notifyChange(uri, null);
-        return deleteCount;
-
-    }
-
-    @Override
-    public int update(Uri uri, ContentValues values, String selection,
-                      String[] selectionArgs) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        switch (uriMatcher.match(uri)) {
-            case ALL_POSTS:
-                break;
-            case SINGLE_POST:
-                String id = uri.getPathSegments().get(1);
-                selection = PostDb.KEY_ROWID + "=" + id
-                        + (!TextUtils.isEmpty(selection) ?
-                        " AND (" + selection + ')' : "");
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported URI: " + uri);
-        }
-        int updateCount = db.update(PostDb.SQLITE_TABLE, values, selection, selectionArgs);
-        getContext().getContentResolver().notifyChange(uri, null);
-        return updateCount;
-    }
-
-}*/
-
-
-    private MyDatabaseHelper database;
-
-    private static final int POST = 10;
-    private static final int POST_ID = 20;
-
-    private static final String AUTHORITY = "com.example.maki.androidprojekat";
-
-    private static final String POST_PATH = "post";
-
-    public static final Uri CONTENT_URI_POST = Uri.parse("content://" + AUTHORITY + "/" + POST_PATH);
-
-    private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-
-    static {
-        sURIMatcher.addURI(AUTHORITY, POST_PATH, POST);
-        sURIMatcher.addURI(AUTHORITY, POST_PATH + "/#", POST_ID);
-    }
-
-    @Override
-    public boolean onCreate() {
-        database = new MyDatabaseHelper(getContext());
-        return true;
-    }
-
-    @Nullable
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        // Uisng SQLiteQueryBuilder instead of query() method
-        SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-
-        // check if the caller has requested a column which does not exist
-        //checkColumns(projection);
-        int uriType = sURIMatcher.match(uri);
-        switch (uriType) {
-            case POST_ID:
-                // Adding the ID to the original query
-                queryBuilder.appendWhere(MyDatabaseHelper.KEY_ROWID + "="
-                        + uri.getLastPathSegment());
-                //$FALL-THROUGH$
-            case POST:
-                // Set the table
-                queryBuilder.setTables(MyDatabaseHelper.POST_TABLE);
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
-        }
-
-        SQLiteDatabase db = database.getWritableDatabase();
-        Cursor cursor = queryBuilder.query(db, projection, selection,
-                selectionArgs, null, null, sortOrder);
-        // make sure that potential listeners are getting notified
-        cursor.setNotificationUri(getContext().getContentResolver(), uri);
-
-        return cursor;
-    }
-
-    @Nullable
-    @Override
-    public String getType(Uri uri) {
         return null;
     }
 
     @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        Uri retVal = null;
-        int uriType = sURIMatcher.match(uri);
-        SQLiteDatabase sqlDB = database.getWritableDatabase();
-        long id = 0;
-        switch (uriType) {
-            case POST:
-                id = sqlDB.insert(MyDatabaseHelper.POST_TABLE, null, values);
-                retVal = Uri.parse(POST_PATH + "/" + id);
-                break;
+    public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+        final int match = sUriMatcher.match(uri);
+        switch (match){
+            // Since we're inserting a single user, there's no need to match USER_ID URI
+            case USERS:
+                return insertUser(uri, values);
+            // Since we're inserting a single comment, there's no need to match COMMENT_ID URI
+           case COMMENTS:
+                return insertComment(uri, values);
+            // Since we're inserting a single post, there's no need to match POST_ID URI
+            case POSTS:
+                return insertPost(uri, values);
+            // Since we're inserting a single tag, there's no need to match TAG_ID URI
+           /* case TAGS:
+                return insertTag(uri, values);*/
+
             default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
+                throw new IllegalArgumentException("Insertion is not supported for: " + uri);
+
         }
-        getContext().getContentResolver().notifyChange(uri, null);
-        return retVal;
+    }
+
+    private Uri insertUser(Uri uri, ContentValues values){
+        //DATA VALIDATION
+        String name = values.getAsString(UserContract.UserEntry.COLUMN_NAME);
+        String photo = values.getAsString(UserContract.UserEntry.COLUMN_PHOTO);
+        String username = values.getAsString(UserContract.UserEntry.COLUMN_USERNAME);
+        String password = values.getAsString(UserContract.UserEntry.COLUMN_PASSWORD);
+        if( name == null || username == null || password == null){
+            throw new IllegalArgumentException("User arguments cannot be empty");
+        }
+        // Gain write access to the database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        // Insert a new user
+        long id = database.insert(UserContract.UserEntry.TABLE_NAME, null, values);
+        // Check if insertion is successful, -1 = failed;
+        if(id == -1){
+            Toast.makeText(getContext(), "Failed to add a new user", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        return ContentUris.withAppendedId(uri, id);
+    }
+    private Uri insertComment(Uri uri, ContentValues values) {
+        //DATA VALIDATION
+        String title = values.getAsString(CommentContract.CommentEntry.COLUMN_TITLE);
+        String description = values.getAsString(CommentContract.CommentEntry.COLUMN_DESCRIPTION);
+        String postId = values.getAsString(CommentContract.CommentEntry.COLUMN_POST_ID);
+        String authorId = values.getAsString(CommentContract.CommentEntry.COLUMN_AUTHOR_ID);
+        String data = values.getAsString(CommentContract.CommentEntry.COLUMN_DATE);
+
+        String likes = values.getAsString(CommentContract.CommentEntry.COLUMN_LIKES);
+        String dislikes = values.getAsString(CommentContract.CommentEntry.COLUMN_DISLIKES);
+
+
+        //Gain write access to the database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        //Insert a new post
+        Long id = database.insert(CommentContract.CommentEntry.TABLE_NAME, null, values);
+        //check if insertion is successful, -1 = failed
+        if (id == -1) {
+            Toast.makeText(getContext(), "Failed to add new comment", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        return ContentUris.withAppendedId(uri, id);
+    }
+
+    private Uri insertPost(Uri uri, ContentValues values) {
+        //DATA VALIDATION
+        String title = values.getAsString(PostContract.PostEntry.COLUMN_TITLE);
+        String description = values.getAsString(PostContract.PostEntry.COLUMN_DESCRIPTION);
+        String photo = values.getAsString(PostContract.PostEntry.COLUMN_PHOTO);
+        String authorId = values.getAsString(PostContract.PostEntry.COLUMN_AUTHOR_ID);
+        String data = values.getAsString(PostContract.PostEntry.COLUMN_DATE);
+        String location = values.getAsString(PostContract.PostEntry.COLUMN_LOCATION);
+        String likes = values.getAsString(PostContract.PostEntry.COLUMN_LIKES);
+        String dislikes = values.getAsString(PostContract.PostEntry.COLUMN_DISLIKES);
+
+        //Gain write access to the database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        //Insert a new post
+        Long id = database.insert(PostContract.PostEntry.TABLE_NAME, null, values);
+        //check if insertion is successful, -1 = failed
+        if (id == -1) {
+            Toast.makeText(getContext(), "Failed to add new post", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        return ContentUris.withAppendedId(uri, id);
+    }
+    //insertComment, insertTag
+    @Override
+    public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        database.delete(PostContract.PostEntry.TABLE_NAME, selection, selectionArgs);
+        return 0;
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
-        int uriType = sURIMatcher.match(uri);
-        SQLiteDatabase sqlDB = database.getWritableDatabase();
-        long id = 0;
-        int rowsDeleted = 0;
-        switch (uriType) {
-            case POST:
-                rowsDeleted = sqlDB.delete(MyDatabaseHelper.POST_TABLE,
-                        selection,
-                        selectionArgs);
-                break;
-            case POST_ID:
-                String idCinema = uri.getLastPathSegment();
-                if (TextUtils.isEmpty(selection)) {
-                    rowsDeleted = sqlDB.delete(MyDatabaseHelper.POST_TABLE,
-                            MyDatabaseHelper.KEY_ROWID + "=" + idCinema,
-                            null);
-                } else {
-                    rowsDeleted = sqlDB.delete(MyDatabaseHelper.POST_TABLE,
-                            MyDatabaseHelper.KEY_ROWID + "=" + idCinema
-                                    + " and "
-                                    + selection,
-                            selectionArgs);
-                }
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
-        }
-        getContext().getContentResolver().notifyChange(uri, null);
-        return rowsDeleted;
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+        return 0;
     }
 
-    @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        int uriType = sURIMatcher.match(uri);
-        SQLiteDatabase sqlDB = database.getWritableDatabase();
-        long id = 0;
-        int rowsUpdated = 0;
-        switch (uriType) {
-            case POST:
-                rowsUpdated = sqlDB.update(MyDatabaseHelper.POST_TABLE,
-                        values,
-                        selection,
-                        selectionArgs);
-                break;
-            case POST_ID:
-                String idPost = uri.getLastPathSegment();
-                if (TextUtils.isEmpty(selection)) {
-                    rowsUpdated = sqlDB.update(MyDatabaseHelper.POST_TABLE,
-                            values,
-                            MyDatabaseHelper.KEY_ROWID + "=" + idPost,
-                            null);
-                } else {
-                    rowsUpdated = sqlDB.update(MyDatabaseHelper.POST_TABLE,
-                            values,
-                            MyDatabaseHelper.KEY_ROWID + "=" + idPost
-                                    + " and "
-                                    + selection,
-                            selectionArgs);
-                }
-                break;
-            default:
-                throw new IllegalArgumentException("Unknown URI: " + uri);
-        }
-        getContext().getContentResolver().notifyChange(uri, null);
-        return rowsUpdated;
-    }
+
 }
-

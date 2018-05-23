@@ -9,7 +9,22 @@ import java.util.List;
 public class Tag {
     private int id;
     private String name;
-    private List<Post> posts;
+    private int post;
+
+    public Tag(){
+    }
+
+    public Tag(int id, String name, int posts) {
+        this.id = id;
+        this.name = name;
+        this.post = posts;
+    }
+
+    public Tag(String name,int post){
+
+        this.name=name;
+        this.post = post;
+    }
 
     public int getId() {
         return id;
@@ -27,20 +42,13 @@ public class Tag {
         this.name = name;
     }
 
-    public List<Post> getPosts() {
-        return posts;
+    public int getPosts() {
+        return post;
     }
 
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
-    }
-
-    public Tag(int id, String name, List<Post> posts) {
-        this.id = id;
-        this.name = name;
-        this.posts = posts;
+    public void setPosts(int post) {
+        this.post = post;
     }
 
 
 }
-
