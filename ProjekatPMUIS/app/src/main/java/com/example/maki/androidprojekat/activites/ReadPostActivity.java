@@ -3,6 +3,7 @@ package com.example.maki.androidprojekat.activites;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.maki.androidprojekat.Adapters.CommentAdapter;
+import com.example.maki.androidprojekat.Database.PostContract;
 import com.example.maki.androidprojekat.R;
 import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
 import com.example.maki.androidprojekat.model.Comment;
@@ -193,7 +195,24 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
             startActivity(new Intent(this, SettingsAcitivity.class));
         }
         if(item.getItemId() == R.id.delete){
+            Intent myIntent = getIntent();
+            id= myIntent.getIntExtra("id",-1);
+            helperDatabaseRead = new HelperDatabaseRead();
+            posts=helperDatabaseRead.loadPostsFromDatabase(this);
+            if(id != -1) {
+                for (Post pp : posts) {
+                    if (pp.getId() == id) {
+                        post = pp;
+                    }
+                }
+            }
+            Uri uri=Uri.withAppendedPath(PostContract.PostEntry.CONTENT_URI,String.valueOf(post.getId()));
+            this.getContentResolver().delete(uri,null,null);
+            Intent startPosts = new Intent(this,PostsActivity.class);
+            startActivity(startPosts);
             Toast.makeText(this,"Deleted",Toast.LENGTH_SHORT).show();
+
+
             startActivity(new Intent(this, PostsActivity.class));
         }
         return super.onOptionsItemSelected(item);

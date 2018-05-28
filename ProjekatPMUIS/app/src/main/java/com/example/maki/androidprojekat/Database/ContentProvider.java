@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -249,14 +250,92 @@ public class ContentProvider extends android.content.ContentProvider {
     //insertComment, insertTag
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        database.delete(PostContract.PostEntry.TABLE_NAME, selection, selectionArgs);
-        return 0;
+        final int match = sUriMatcher.match(uri);
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        int rowsDeleted = 0;
+        switch (match){
+            case POST_ID:
+                String idPost = uri.getLastPathSegment();
+                if (TextUtils.isEmpty(selection)) {
+                    rowsDeleted = database.delete(PostContract.PostEntry.TABLE_NAME,
+                            PostContract.PostEntry._ID + "=" + idPost,
+                            null);
+                } else {
+                    rowsDeleted = database.delete(PostContract.PostEntry._ID,
+                            PostContract.PostEntry._ID + "=" + idPost
+                                    + " and "
+                                    + selection,
+                            selectionArgs);
+                }break;
+            case COMMENT_ID:
+                String idComm = uri.getLastPathSegment();
+                if (TextUtils.isEmpty(selection)) {
+                    rowsDeleted = database.delete(CommentContract.CommentEntry.TABLE_NAME,
+                            CommentContract.CommentEntry._ID + "=" + idComm,
+                            null);
+                } else {
+                    rowsDeleted = database.delete(CommentContract.CommentEntry._ID,
+                            CommentContract.CommentEntry._ID + "=" + idComm
+                                    + " and "
+                                    + selection,
+                            selectionArgs);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
+
+
+        return rowsDeleted;
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
-        return 0;
+        final int match = sUriMatcher.match(uri);
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        int rowsUpdated = 0;
+        switch (match){
+            case POST_ID:
+                String idPOst = uri.getLastPathSegment();
+
+                if (TextUtils.isEmpty(selection)) {
+                    rowsUpdated = database.update(PostContract.PostEntry.TABLE_NAME,
+                            values,
+                            PostContract.PostEntry._ID + "=" + idPOst,
+                            null);
+                } else {
+                    rowsUpdated = database.update(PostContract.PostEntry.TABLE_NAME,
+                            values,
+                            PostContract.PostEntry._ID + "=" + idPOst
+                                    + " and "
+                                    + selection,
+                            selectionArgs);
+                }
+                break;
+            case COMMENT_ID:
+                String idComm = uri.getLastPathSegment();
+
+                if (TextUtils.isEmpty(selection)) {
+                    rowsUpdated = database.update(CommentContract.CommentEntry.TABLE_NAME,
+                            values,
+                            CommentContract.CommentEntry._ID + "=" + idComm,
+                            null);
+                } else {
+                    rowsUpdated = database.update(CommentContract.CommentEntry.TABLE_NAME,
+                            values,
+                            CommentContract.CommentEntry._ID + "=" + idComm
+                                    + " and "
+                                    + selection,
+                            selectionArgs);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown URI: " + uri);
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return rowsUpdated;
     }
+
 
 
 }
