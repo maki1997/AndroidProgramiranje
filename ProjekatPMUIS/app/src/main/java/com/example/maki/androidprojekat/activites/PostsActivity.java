@@ -91,6 +91,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
                 R.string.openNavDrawer, R.string.closeNavDrawer) {
             @Override
             public void onDrawerOpened(View drawerView) {
+                helperDatabaseRead = new HelperDatabaseRead();
                 usernameND = (TextView) findViewById(R.id.usernameDrawer);
                 nameND = (TextView) findViewById(R.id.nameDrawer);
                 User u=null;

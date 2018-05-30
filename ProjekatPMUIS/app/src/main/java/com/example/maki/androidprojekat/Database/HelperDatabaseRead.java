@@ -422,7 +422,7 @@ public class HelperDatabaseRead {
         values.put(PostContract.PostEntry.COLUMN_AUTHOR_ID, post.getAuthor().getId());
         values.put(PostContract.PostEntry.COLUMN_LIKES, post.getLikes());
         values.put(PostContract.PostEntry.COLUMN_DISLIKES, post.getDislikes());
-        values.put(PostContract.PostEntry.COLUMN_LOCATION, post.getLocation().toString());
+        values.put(PostContract.PostEntry.COLUMN_LOCATION, post.getLocation());
         Uri uri=Uri.withAppendedPath(PostContract.PostEntry.CONTENT_URI,String.valueOf(post.getId()));
         mNewUri= activity.getContentResolver().update(uri,values,selection,selectionArgs);
 

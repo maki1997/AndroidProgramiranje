@@ -116,6 +116,17 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
                 R.string.openNavDrawer,R.string.closeNavDrawer){
             @Override
             public void onDrawerOpened(View drawerView) {
+                helperDatabaseRead = new HelperDatabaseRead();
+                usernameND = (TextView) findViewById(R.id.usernameDrawer);
+                nameND = (TextView) findViewById(R.id.nameDrawer);
+                User u=null;
+                for(User uu:helperDatabaseRead.loadUsersFromDatabase(ReadPostActivity.this)){
+                    if(uu.getId() == idUser){
+                        u=uu;
+                    }
+                }
+                usernameND.setText(u.getUsername());
+                nameND.setText(u.getName());
 
                 Toast.makeText(ReadPostActivity.this,"Drawer Opened",Toast.LENGTH_SHORT).show();
             }
@@ -130,10 +141,6 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
         drawerLayout.setDrawerListener(drawerListener);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
-
     }
 
     @Override

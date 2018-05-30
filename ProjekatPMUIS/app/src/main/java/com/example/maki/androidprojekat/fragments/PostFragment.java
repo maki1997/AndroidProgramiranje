@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
+import android.support.annotation.RequiresPermission;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
 import com.example.maki.androidprojekat.R;
+import com.example.maki.androidprojekat.activites.ReadPostActivity;
 import com.example.maki.androidprojekat.model.Post;
 import com.example.maki.androidprojekat.model.Tag;
 import com.example.maki.androidprojekat.model.User;
@@ -90,12 +92,12 @@ public class PostFragment extends Fragment {
                 }
             }
         }
+
         textView=(TextView)view.findViewById(R.id.authorRP);
         textView.setText(post.getAuthor().getName());
         textView=(TextView)view.findViewById(R.id.titleRP);
-
         textView.setText(post.getTitle());
-        textView=(TextView)view.findViewById(R.id.location);
+        textView=(TextView)view.findViewById(R.id.locRP);
         textView.setText(post.getLocation());
         textView=(TextView)view.findViewById(R.id.descRP);
         textView.setText(post.getDescription());
@@ -120,7 +122,8 @@ public class PostFragment extends Fragment {
         textView.setText(disslike);
         textView=(TextView)view.findViewById(R.id.date);
         String date = new SimpleDateFormat("dd.MM.yyyy").format(post.getDate());
-        textView.setText(date);}
+        textView.setText(date);
+    }
 
 
     public void likeAndDislike(final View view){
@@ -144,7 +147,6 @@ public class PostFragment extends Fragment {
                             imb.setBackgroundResource(R.drawable.liked);
                             stanje=1;
                             helperDatabaseRead = new HelperDatabaseRead();
-                            post.setLocation("gagaga");
                             helperDatabaseRead.updatePost(post,getActivity(),null,null);
                             textView=(TextView)view.findViewById(R.id.likes);
                             textView.setText(String.valueOf(post.getLikes()));
