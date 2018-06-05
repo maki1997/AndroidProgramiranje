@@ -25,11 +25,9 @@ import java.util.Comparator;
 import com.example.maki.androidprojekat.Adapters.PostAdapter;
 import com.example.maki.androidprojekat.R;
 import com.example.maki.androidprojekat.Database.DatabaseHelper;
-import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
+import com.example.maki.androidprojekat.Database.DB_Helper;
 import com.example.maki.androidprojekat.model.Post;
 import com.example.maki.androidprojekat.model.User;
-
-import org.w3c.dom.Text;
 
 @SuppressWarnings("deprecation")
 public class PostsActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
@@ -39,7 +37,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
     private String[] lista;
     private ActionBarDrawerToggle drawerListener;
     private ArrayList<Post> posts = new ArrayList<Post>();
-    private HelperDatabaseRead helperDatabaseRead;
+    private DB_Helper helperDatabaseRead;
     private DatabaseHelper mDbHelper;
     private TextView usernameND;
     private TextView nameND;
@@ -91,11 +89,11 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
                 R.string.openNavDrawer, R.string.closeNavDrawer) {
             @Override
             public void onDrawerOpened(View drawerView) {
-                helperDatabaseRead = new HelperDatabaseRead();
+                helperDatabaseRead = new DB_Helper();
                 usernameND = (TextView) findViewById(R.id.usernameDrawer);
                 nameND = (TextView) findViewById(R.id.nameDrawer);
                 User u=null;
-                for(User uu:helperDatabaseRead.loadUsersFromDatabase(PostsActivity.this)){
+                for(User uu:helperDatabaseRead.readUsers(PostsActivity.this)){
                     if(uu.getId() == idUser){
                         u=uu;
                     }
@@ -115,9 +113,9 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        helperDatabaseRead = new HelperDatabaseRead();
+        helperDatabaseRead = new DB_Helper();
         User u=null;
-        for(User usser :helperDatabaseRead.loadUsersFromDatabase(this)){
+        for(User usser :helperDatabaseRead.readUsers(this)){
             if(usser.getId() == 1){
                 u=usser;
             }
@@ -136,15 +134,16 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
         posts.add(post1);
         posts.add(post2);
         posts.add(post3);*/
-        posts = helperDatabaseRead.loadPostsFromDatabase(this);
+        posts = helperDatabaseRead.readPosts(this);
         PostAdapter pAdapter = new PostAdapter(this, posts);
         ListView listView1 = findViewById(R.id.posts);
         listView1.setAdapter(pAdapter);
         listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Post clicked = (Post) adapterView.getItemAtPosition(i);
                 Intent intent = new Intent(PostsActivity.this,ReadPostActivity.class);
-                intent.putExtra("id",i+1);
+                intent.putExtra("id",clicked.getId());
                 startActivity(intent);
             }
 
@@ -156,15 +155,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
 
 
         PreferenceManager.setDefaultValues(this,R.xml.preferences,false);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean postDate = sharedPref.getBoolean("sort_posts_date",true);
-        boolean postPop = sharedPref.getBoolean("sort_posts_popularity",false);
-        boolean postDateDesc = sharedPref.getBoolean("sort_posts_date_desc",false);
-        boolean postPopDesc = sharedPref.getBoolean("sort_posts_popularity_desc",false);
-        boolean commentDate = sharedPref.getBoolean("sort_comments_date",false);
-        boolean commentPop = sharedPref.getBoolean("sort_comments_popularity",false);
-        boolean commentDateDesc = sharedPref.getBoolean("sort_comments_date_desc",false);
-        boolean commentPopDesc = sharedPref.getBoolean("sort_comments_popularity_desc",false);
+
 
 
 
@@ -258,9 +249,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
             });
         }
 
-        /*PostAdapter pAdapter = new PostAdapter(this, posts);
-        ListView listView1 = findViewById(R.id.posts);
-        listView1.setAdapter(pAdapter);*/
+
 
 
 
@@ -277,17 +266,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
         super.onDestroy();
     };
 
-/*    public void btnStartsCreatePostActivity(View view) {
-        startActivity(new Intent(this, CreatePostActivity.class));
-    }
 
-    public void btnStartsReadPostActivity(View view) {
-        startActivity(new Intent(this, ReadPostActivity.class));
-    }
-
-    public void btnStartsSettingsActivity(View view) {
-        startActivity(new Intent(this, SettingsAcitivity.class));
-    }*/
 
 
 
@@ -307,25 +286,7 @@ public class PostsActivity extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-    public void sortByDate(){
-        Collections.sort(posts, new Comparator<Post>() {
-            @Override
-            public int compare(Post post, Post t1) {
-                return post.getDate().compareTo(t1.getDate()) ;
-            }
-        });
-    }
 
-    public void sortPostsByPopularity(){
-
-        Collections.sort(posts, new Comparator< Post >() {
-            @Override
-            public int compare(Post post, Post t1) {
-                return   post.getLikes()-post.getDislikes() - t1.getLikes()-t1.getDislikes();
-            }
-
-
-        });}
 
 
 }

@@ -14,6 +14,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.maki.androidprojekat.Database.Contracts.CommentContract;
+import com.example.maki.androidprojekat.Database.Contracts.PostContract;
+import com.example.maki.androidprojekat.Database.Contracts.TagContract;
+import com.example.maki.androidprojekat.Database.Contracts.UserContract;
+
 public class ContentProvider extends android.content.ContentProvider {
 
     public static final String LOG_TAG = ContentProvider.class.getSimpleName();
@@ -172,8 +177,8 @@ public class ContentProvider extends android.content.ContentProvider {
             case POSTS:
                 return insertPost(uri, values);
             // Since we're inserting a single tag, there's no need to match TAG_ID URI
-           /* case TAGS:
-                return insertTag(uri, values);*/
+            case TAGS:
+                return insertTag(uri, values);
 
             default:
                 throw new IllegalArgumentException("Insertion is not supported for: " + uri);
@@ -247,7 +252,24 @@ public class ContentProvider extends android.content.ContentProvider {
         }
         return ContentUris.withAppendedId(uri, id);
     }
-    //insertComment, insertTag
+
+    private Uri insertTag(Uri uri, ContentValues values) {
+        //DATA VALIDATION
+        String name = values.getAsString(TagContract.TagEntry.COLUMN_NAME);
+        int post_id = values.getAsInteger(TagContract.TagEntry.COLUMN_POST_ID);
+
+        //Gain write access to the database
+        SQLiteDatabase database = mDbHelper.getWritableDatabase();
+        //Insert a new post
+        Long id = database.insert(TagContract.TagEntry.TABLE_NAME, null, values);
+        //check if insertion is successful, -1 = failed
+        if (id == -1) {
+            Toast.makeText(getContext(), "Failed to add new tag", Toast.LENGTH_SHORT).show();
+            return null;
+        }
+        return ContentUris.withAppendedId(uri, id);
+    }
+    //addComment, addTag
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);

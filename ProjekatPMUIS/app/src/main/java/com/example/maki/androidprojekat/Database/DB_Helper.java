@@ -6,6 +6,10 @@ import android.database.Cursor;
 import android.net.Uri;
 
 
+import com.example.maki.androidprojekat.Database.Contracts.CommentContract;
+import com.example.maki.androidprojekat.Database.Contracts.PostContract;
+import com.example.maki.androidprojekat.Database.Contracts.TagContract;
+import com.example.maki.androidprojekat.Database.Contracts.UserContract;
 import com.example.maki.androidprojekat.model.Comment;
 import com.example.maki.androidprojekat.model.Post;
 import com.example.maki.androidprojekat.model.Tag;
@@ -16,11 +20,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class HelperDatabaseRead {
+public class DB_Helper {
     private ArrayList<Post> postsss = new ArrayList<>();
 
-    public ArrayList<Post> loadPostsFromDatabase(Activity activity){
-        //Definisi projekciju pomocu koje ces da ucitas podatke iz tabele post
+    public ArrayList<Post> readPosts(Activity activity){
+        //projection to read from table
         String[] projection = {
                 PostContract.PostEntry._ID,
                 PostContract.PostEntry.COLUMN_TITLE,
@@ -36,9 +40,8 @@ public class HelperDatabaseRead {
         Cursor cursor = activity.getContentResolver().query(PostContract.PostEntry.CONTENT_URI, projection, null, null, null);
 
         ArrayList<Post> posts = new ArrayList<>();
-        //Uzmi relevantne podatke za svaki post
+        //reading post data
         try{
-            //Prvo nadji indeks svake kolone
             int idColumnIndex = cursor.getColumnIndex(PostContract.PostEntry._ID);
             int titleColumnIndex = cursor.getColumnIndex(PostContract.PostEntry.COLUMN_TITLE);
             int descriptionColumnIndex = cursor.getColumnIndex(PostContract.PostEntry.COLUMN_DESCRIPTION);
@@ -61,12 +64,12 @@ public class HelperDatabaseRead {
                 int likes = Integer.parseInt(cursor.getString(likesColumnIndex));
                 int dislikes = Integer.parseInt(cursor.getString(dislikesColumnIndex));
                 User author = null;
-                for(User u:loadUsersFromDatabase(activity)){
+                for(User u: readUsers(activity)){
                     if(u.getId() == authorId){
                         author=u;
                     }
                 }
-                ArrayList<Comment> commentsAll = loadCommentsFromDatabase(activity);
+                ArrayList<Comment> commentsAll = readComments(activity);
                 ArrayList<Comment> commentsFiltered = new ArrayList<>();
                 for(Comment comment : commentsAll) {
 
@@ -78,22 +81,9 @@ public class HelperDatabaseRead {
                         }
 
                     }
-                }/*
-                ArrayList<Tag> tagsAll = loadTagsFromDatabase(activity);
-                ArrayList<Tag> tagsFiltered = new ArrayList<>();
-                for(Tag tag : tagsAll) {
+                }
 
-                    if (tag != null) {
-                        for(Post p:tag.getPosts()) {
-                            if (p.getId() == currentId) {
-                                tagsFiltered.add(tag);
-
-                            }
-                        }
-                    }
-                }*/
-
-                    posts.add(new Post(currentId,title,description,null,author,cDate,null,null,commentsFiltered,likes,dislikes));
+                    posts.add(new Post(currentId,title,description,null,author,cDate,location,null,commentsFiltered,likes,dislikes));
                 }
 
 
@@ -114,10 +104,9 @@ public class HelperDatabaseRead {
         }
         return null;
     }
-  //  private ArrayList<Comment> comments = new ArrayList<>();
 
-    public ArrayList<Comment> loadCommentsFromDatabase(Activity activity){
-        //Definisi projekciju pomocu koje ces da ucitas podatke iz tabele comment
+    public ArrayList<Comment> readComments(Activity activity){
+        //projection to read
         String[] projection = {
                 CommentContract.CommentEntry._ID,
                 CommentContract.CommentEntry.COLUMN_TITLE,
@@ -153,7 +142,7 @@ public class HelperDatabaseRead {
                 int likes = Integer.parseInt(cursor.getString(likesColumnIndex));
                 int dislikes = Integer.parseInt(cursor.getString(dislikesColumnIndex));
                 User author = null;
-                for(User u:loadUsersFromDatabase(activity)){
+                for(User u: readUsers(activity)){
                     if(u.getId() == authorId){
                         author=u;
                     }
@@ -168,8 +157,8 @@ public class HelperDatabaseRead {
         return comments;
 
     }
-    public ArrayList<User> loadUsersFromDatabase(Activity activity){
-        //Definisi projekciju pomocu koje ces da ucitas podatke iz tabele user
+    public ArrayList<User> readUsers(Activity activity){
+        //projection to read
         String[] projection = {
                 UserContract.UserEntry._ID,
                 UserContract.UserEntry.COLUMN_NAME,
@@ -206,8 +195,8 @@ public class HelperDatabaseRead {
 
     }
 
-    public ArrayList<Tag> loadTagsFromDatabase(Activity activity){
-        //Definisi projekciju pomocu koje ces da ucitas podatke iz tabele tag
+    public ArrayList<Tag> readTags(Activity activity){
+        //projection to read tag
         String[] projection = {
                 TagContract.TagEntry._ID,
                 TagContract.TagEntry.COLUMN_NAME,
@@ -226,8 +215,8 @@ public class HelperDatabaseRead {
             while(cursor.moveToNext()){
                 int currentId = cursor.getInt(idColumnIndex);
                 String name = cursor.getString(nameColumnIndex);
-                int post= cursor.getInt(postColumnIndex);
-                tags.add(new Tag(currentId,name,post));
+                int post_id= cursor.getInt(postColumnIndex);
+                tags.add(new Tag(currentId,name,post_id));
             }
         }finally {
             cursor.close();
@@ -237,143 +226,7 @@ public class HelperDatabaseRead {
     }
 
 
-
-
-    public User findUserById(int userId, Activity activity){
-        User user = null;
-
-        String[] projection={
-                UserContract.UserEntry._ID,
-                UserContract.UserEntry.COLUMN_NAME,
-                UserContract.UserEntry.COLUMN_PHOTO,
-                UserContract.UserEntry.COLUMN_USERNAME,
-                UserContract.UserEntry.COLUMN_PASSWORD
-        };
-        String sortOrder = UserContract.UserEntry._ID + "DESC";
-        Cursor cursor = activity.getContentResolver().query(UserContract.UserEntry.CONTENT_URI, projection, null, null, null);
-
-        try{
-            int idColumnIndex = cursor.getColumnIndex(UserContract.UserEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_NAME);
-            int photoColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_PHOTO);
-            int usernameColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_USERNAME);
-            int passwordColumnIndex = cursor.getColumnIndex(UserContract.UserEntry.COLUMN_PASSWORD);
-
-        while (cursor.moveToNext()){
-            int currentId = cursor.getInt(idColumnIndex);
-            String name = cursor.getString(nameColumnIndex);
-            String photo = cursor.getString(photoColumnIndex);
-            String username = cursor.getString(usernameColumnIndex);
-            String password = cursor.getString(passwordColumnIndex);
-           if(currentId == userId){
-                user.setId(currentId);
-            }
-
-
-            user = new User(userId, name, null,username, password);
-
-        }
-        }
-        finally {
-            cursor.close();
-        }
-    return user;
-    }
-
-    public Post findPostById(int postId, Activity activity){
-        Post post = null;
-        String[] projection = {
-                PostContract.PostEntry._ID,
-                PostContract.PostEntry.COLUMN_TITLE,
-                PostContract.PostEntry.COLUMN_DESCRIPTION,
-                PostContract.PostEntry.COLUMN_PHOTO,
-                PostContract.PostEntry.COLUMN_AUTHOR_ID,
-                PostContract.PostEntry.COLUMN_DATE,
-                PostContract.PostEntry.COLUMN_LOCATION,
-                PostContract.PostEntry.COLUMN_LIKES,
-                PostContract.PostEntry.COLUMN_DISLIKES
-        };
-        String sortOrder = PostContract.PostEntry._ID + "DESC";
-        Cursor cursor = activity.getContentResolver().query(PostContract.PostEntry.CONTENT_URI, projection, null, null, null);
-
-        try {
-            int idColumnIndex = cursor.getColumnIndex(PostContract.PostEntry._ID);
-            int titleColumnIndex = cursor.getColumnIndex(PostContract.PostEntry.COLUMN_TITLE);
-            int descriptionColumnIndex = cursor.getColumnIndex(PostContract.PostEntry.COLUMN_DESCRIPTION);
-            int photoColumnIndex = cursor.getColumnIndex(PostContract.PostEntry.COLUMN_PHOTO);
-            int authorIdColumnIndex = cursor.getColumnIndex(PostContract.PostEntry.COLUMN_AUTHOR_ID);
-            int dateColumnIndex = cursor.getColumnIndex(PostContract.PostEntry.COLUMN_DATE);
-            int locationColumnIndex = cursor.getColumnIndex(PostContract.PostEntry.COLUMN_LOCATION);
-            int likesColumnIndex = cursor.getColumnIndex(PostContract.PostEntry.COLUMN_LIKES);
-            int dislikesColumnIndex = cursor.getColumnIndex(PostContract.PostEntry.COLUMN_DISLIKES);
-
-            while(cursor.moveToNext()) {
-                int currentId = cursor.getInt(idColumnIndex);
-                String title = cursor.getString(titleColumnIndex);
-                String description = cursor.getString(descriptionColumnIndex);
-                String photo = cursor.getString(photoColumnIndex);
-                int authorId = Integer.parseInt(cursor.getString(authorIdColumnIndex));
-                String date = cursor.getString(dateColumnIndex);
-                String location = cursor.getString(locationColumnIndex);
-                int likes = Integer.parseInt(cursor.getString(likesColumnIndex));
-                int dislikes = Integer.parseInt(cursor.getString(dislikesColumnIndex));
-                User author = findUserById(authorId, activity);
-                ArrayList<Comment> commentsAll = loadCommentsFromDatabase(activity);
-                ArrayList<Comment> commentsFiltered = new ArrayList<>();
-                for(Comment comment : commentsAll) {
-
-                    if (comment != null) {
-
-                        if (comment.getPost() == currentId) {
-                            commentsFiltered.add(comment);
-
-                        }
-
-                    }
-                }
-
-                post = new Post(postId, title, description, null,author, null, null, null, commentsFiltered, likes,dislikes);
-
-
-            }
-
-        }finally {
-            cursor.close();
-        } return post;
-
-    }
-
-
-    public Tag findTagById(int postId, Activity activity){
-        Tag tag = null;
-        String[] projection = {
-                TagContract.TagEntry._ID,
-                TagContract.TagEntry.COLUMN_NAME,
-                TagContract.TagEntry.COLUMN_POST_ID
-        };
-        String sortOrder = TagContract.TagEntry._ID + "DESC";
-        Cursor cursor = activity.getContentResolver().query(TagContract.TagEntry.CONTENT_URI, projection, null,null, null);
-
-        try {
-            int idColumnIndex = cursor.getColumnIndex(TagContract.TagEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(TagContract.TagEntry.COLUMN_NAME);
-            int postColumnIndex = cursor.getColumnIndex(TagContract.TagEntry.COLUMN_POST_ID);
-
-            while(cursor.moveToNext()) {
-                int currentId = cursor.getInt(idColumnIndex);
-                String name = cursor.getString(nameColumnIndex);
-                int post = cursor.getInt(postColumnIndex);
-                tag = new Tag(currentId,name,post);
-
-            }
-
-        }finally {
-            cursor.close();
-        } return tag;
-
-    }
-
-    public void insertPost(Post post,Activity activity){
+    public void addPost(Post post, Activity activity){
         Uri mNewUri;
         String date = new SimpleDateFormat("dd.MM.yyyy").format(post.getDate());
         ContentValues values = new ContentValues();
@@ -383,11 +236,11 @@ public class HelperDatabaseRead {
         values.put(PostContract.PostEntry.COLUMN_AUTHOR_ID, post.getAuthor().getId());
         values.put(PostContract.PostEntry.COLUMN_LIKES, post.getLikes());
         values.put(PostContract.PostEntry.COLUMN_DISLIKES, post.getDislikes());
-        values.put(PostContract.PostEntry.COLUMN_LOCATION, post.getLocation().toString());
+        values.put(PostContract.PostEntry.COLUMN_LOCATION, post.getLocation());
         mNewUri= activity.getContentResolver().insert(PostContract.PostEntry.CONTENT_URI,values);
 
     }
-    public void insertComment(Comment comment,Activity activity){
+    public void addComment(Comment comment, Activity activity){
         Uri mNewUri;
         String date = new SimpleDateFormat("dd.MM.yyyy").format(comment.getDate());
         ContentValues values = new ContentValues();
@@ -401,12 +254,12 @@ public class HelperDatabaseRead {
         mNewUri= activity.getContentResolver().insert(CommentContract.CommentEntry.CONTENT_URI,values);
 
     }
-    public void insertTag(Tag tag,Activity activity){
+    public void addTag(Tag tag, Activity activity){
         Uri mNewUri;
 
         ContentValues values = new ContentValues();
         values.put(TagContract.TagEntry.COLUMN_NAME, tag.getName());
-        values.put(TagContract.TagEntry.COLUMN_POST_ID, tag.getPosts());
+        values.put(TagContract.TagEntry.COLUMN_POST_ID, tag.getPost_id());
 
         mNewUri= activity.getContentResolver().insert(TagContract.TagEntry.CONTENT_URI,values);
 

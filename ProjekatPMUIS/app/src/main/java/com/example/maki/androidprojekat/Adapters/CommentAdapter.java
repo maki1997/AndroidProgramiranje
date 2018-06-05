@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
+import com.example.maki.androidprojekat.Database.DB_Helper;
 import com.example.maki.androidprojekat.R;
 import com.example.maki.androidprojekat.model.Comment;
 
@@ -23,7 +23,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
     private int stanje = 0;
     private Comment comment;
     private TextView textView;
-    private HelperDatabaseRead helperDatabaseRead;
+    private DB_Helper helperDatabaseRead;
     public CommentAdapter(Context context, ArrayList<Comment> comments){
         super(context,0,comments);
         this.mContext= context;
@@ -47,7 +47,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
         like_view.setText(sl);
         String dis=String.valueOf(comment.getDislikes());
         dislike_view.setText(dis);
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         String sDate= dateFormat.format(comment.getDate());
         date_view.setText(sDate);
         likesAndDislikes(view);
@@ -65,7 +65,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
                     case 0:
                         comment.setLikes(comment.getLikes()+1);
                         stanje=1;
-                        helperDatabaseRead = new HelperDatabaseRead();
+                        helperDatabaseRead = new DB_Helper();
 
                         helperDatabaseRead.updateComment(comment, (Activity) mContext,null,null);
                         textView=(TextView)view.findViewById(R.id.likeComm);
@@ -74,7 +74,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
                     case 1:
                         comment.setLikes(comment.getLikes()-1);
                         stanje=0;
-                        helperDatabaseRead = new HelperDatabaseRead();
+                        helperDatabaseRead = new DB_Helper();
                         helperDatabaseRead.updateComment(comment,(Activity) mContext,null,null);
                         textView=(TextView)view.findViewById(R.id.likeComm);
                         textView.setText(String.valueOf(comment.getLikes()));
@@ -83,7 +83,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
                         comment.setLikes(comment.getLikes()+1);
                         comment.setDislikes(comment.getDislikes()-1);
                         stanje=1;
-                        helperDatabaseRead = new HelperDatabaseRead();
+                        helperDatabaseRead = new DB_Helper();
                         helperDatabaseRead.updateComment(comment,(Activity) mContext,null,null);
                         textView=(TextView)view.findViewById(R.id.likeComm);
                         textView.setText(String.valueOf(comment.getLikes()));
@@ -102,7 +102,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
                     case 0:
                         comment.setDislikes(comment.getDislikes()+1);
                         stanje=-1;
-                        helperDatabaseRead = new HelperDatabaseRead();
+                        helperDatabaseRead = new DB_Helper();
                         helperDatabaseRead.updateComment(comment,(Activity) mContext,null,null);
 
                         textView=(TextView)view.findViewById(R.id.dislkeComm);
@@ -112,7 +112,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
                         comment.setLikes(comment.getLikes()-1);
                         comment.setDislikes(comment.getDislikes()+1);
                         stanje=-1;
-                        helperDatabaseRead = new HelperDatabaseRead();
+                        helperDatabaseRead = new DB_Helper();
                         helperDatabaseRead.updateComment(comment,(Activity) mContext,null,null);
                         textView=(TextView)view.findViewById(R.id.likeComm);
                         textView.setText(String.valueOf(comment.getLikes()));
@@ -123,7 +123,7 @@ public class CommentAdapter extends ArrayAdapter<Comment> {
 
                         comment.setDislikes(comment.getDislikes()-1);
                         stanje=0;
-                        helperDatabaseRead = new HelperDatabaseRead();
+                        helperDatabaseRead = new DB_Helper();
                         helperDatabaseRead.updateComment(comment,(Activity) mContext,null,null);
 
                         textView=(TextView)view.findViewById(R.id.dislkeComm);

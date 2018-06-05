@@ -1,4 +1,4 @@
-package com.example.maki.androidprojekat.Database;
+package com.example.maki.androidprojekat.Database.Contracts;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

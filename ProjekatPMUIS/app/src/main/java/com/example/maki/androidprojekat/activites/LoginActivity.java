@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.maki.androidprojekat.R;
-import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
+import com.example.maki.androidprojekat.Database.DB_Helper;
 import com.example.maki.androidprojekat.model.User;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText et;
-    private HelperDatabaseRead helperDatabaseRead;
+    private DB_Helper helperDatabaseRead;
     private ArrayList<User> users = new ArrayList<User>();
 
     @Override
@@ -67,8 +67,8 @@ public class LoginActivity extends AppCompatActivity {
     }
     public boolean login(String user,String pass){
 
-        helperDatabaseRead = new HelperDatabaseRead();
-        users = helperDatabaseRead.loadUsersFromDatabase(this);
+        helperDatabaseRead = new DB_Helper();
+        users = helperDatabaseRead.readUsers(this);
         for(User u:users){
             if (u.getUsername().equals(user))
                 if (u.getPassword().equals(pass)) {

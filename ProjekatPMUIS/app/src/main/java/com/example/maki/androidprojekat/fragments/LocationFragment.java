@@ -29,7 +29,7 @@ public class LocationFragment extends Fragment implements LocationListener {
     private AlertDialog dialog;
 
     public LocationFragment() {
-        // Required empty public constructor
+        // prazan konstruktor
     }
     public static LocationFragment newInstance() {
         LocationFragment l=new LocationFragment();
@@ -43,12 +43,10 @@ public class LocationFragment extends Fragment implements LocationListener {
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
     }
     private void createLocationFragmentAndInflate() {
-        //specificiramo krijterijum da dobijamo informacije sa svih izvora
-        //ako korisnik to dopusti
+        //get all source data
         Criteria criteria = new Criteria();
 
-        //sistemskom servisu prosledjujemo taj kriterijum da bi
-        //mogli da dobijamo informacje sa tog izvora
+        //sending criteria to service
         provider = locationManager.getBestProvider(criteria, true);
 
     }
@@ -124,13 +122,11 @@ public class LocationFragment extends Fragment implements LocationListener {
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
 
-            // Should we show an explanation?
+            // explanatioon
             if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+                // ask user and try to access loc again
                 new AlertDialog.Builder(getActivity())
                         .setTitle("Allow user location")
                         .setMessage("To continue working we need your locations....Allow now?")
@@ -167,12 +163,11 @@ public class LocationFragment extends Fragment implements LocationListener {
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
+                // canceled request lists are empty
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    // permission was granted, yay! Do the
-                    // location-related task you need to do.
+                    // permission was granted
                     if (ContextCompat.checkSelfPermission(getActivity(),
                             Manifest.permission.ACCESS_FINE_LOCATION)
                             == PackageManager.PERMISSION_GRANTED) {

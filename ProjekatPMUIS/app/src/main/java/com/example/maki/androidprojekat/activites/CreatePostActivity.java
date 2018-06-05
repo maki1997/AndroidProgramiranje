@@ -30,13 +30,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.maki.androidprojekat.R;
-import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
+import com.example.maki.androidprojekat.Database.DB_Helper;
 import com.example.maki.androidprojekat.model.Post;
+import com.example.maki.androidprojekat.model.Tag;
 import com.example.maki.androidprojekat.model.User;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -51,7 +54,7 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
     private ActionBarDrawerToggle drawerListener;
     int idUser = -1;
     private EditText textView;
-    private HelperDatabaseRead helperDatabaseRead;
+    private DB_Helper helperDatabaseRead;
     private TextView usernameND;
     private TextView nameND;
     private LocationManager locationManager;
@@ -84,8 +87,9 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
                     startActivity(new Intent(view.getContext(), SettingsAcitivity.class));
                 }
                 if (position == 3) {
-                    startActivity(new Intent(view.getContext(), LoginActivity.class));
-                    finish();
+                    finishAffinity();
+                    Intent intent = new Intent(CreatePostActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 }
             }
         });
@@ -97,11 +101,11 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
                 R.string.openNavDrawer,R.string.closeNavDrawer){
             @Override
             public void onDrawerOpened(View drawerView) {
-                helperDatabaseRead = new HelperDatabaseRead();
+                helperDatabaseRead = new DB_Helper();
                 usernameND = (TextView) findViewById(R.id.usernameDrawer);
                 nameND = (TextView) findViewById(R.id.nameDrawer);
                 User u=null;
-                for(User uu:helperDatabaseRead.loadUsersFromDatabase(CreatePostActivity.this)){
+                for(User uu:helperDatabaseRead.readUsers(CreatePostActivity.this)){
                     if(uu.getId() == idUser){
                         u=uu;
                     }
@@ -160,8 +164,10 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
         }else{
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
             Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            lat=location.getLatitude();
-            lon=location.getLongitude();
+            if(location!= null){
+                lat = location.getLatitude();
+                lon = location.getLongitude();
+            }
         }
 
 
@@ -255,25 +261,39 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
     }
 
     public void createPost(){
-        helperDatabaseRead = new HelperDatabaseRead();
+        helperDatabaseRead = new DB_Helper();
         textView=(EditText) findViewById(R.id.titleCP);
         String title=textView.getText().toString();
         textView=(EditText)findViewById(R.id.descriptionCP);
         String desc=textView.getText().toString();
         textView=(EditText)findViewById(R.id.tagsCp);
         String tag=textView.getText().toString();
+        String[] tags = tag.split(",");
+        helperDatabaseRead.readTags(this);
+        List<Integer> listId = new ArrayList<Integer>();
+        for(String ttag : tags){
+            ArrayList<Post> posts = helperDatabaseRead.readPosts(this);
+            for (Post ppp:posts){
+                int ids = ppp.getId();
+                listId.add(ids);
+            }
+            int maxId = Collections.max(listId);
+            Tag t = new Tag(ttag,maxId+1);
+            helperDatabaseRead.addTag(t,this);
+
+        }
         User u=null;
-        for(User uu:helperDatabaseRead.loadUsersFromDatabase(this)){
+        for(User uu:helperDatabaseRead.readUsers(this)){
             if(uu.getId() == idUser){
                 u=uu;
             }
         }
 
-        Post p =new Post(desc, title,null,u,getDateTime(),hereLocation(lat,lon),null,null,0,0);
+        Post p =new Post(title, desc,null,u,getDateTime(), getMyLocation(lat,lon),null,null,0,0);
         Log.e("title:",p.getTitle());
 
 
-        helperDatabaseRead.insertPost(p,this);
+        helperDatabaseRead.addPost(p,this);
     }
 
     @Override
@@ -287,8 +307,8 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
         }
     }
 
-    public String hereLocation(double lat,double lon){
-        String ourSity="";
+    public String getMyLocation(double lat, double lon){
+        String myLoc ="";
         Geocoder geocoder=new Geocoder(CreatePostActivity.this, Locale.getDefault());
         List<Address> addressList = null;
         try {
@@ -300,18 +320,19 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
         if(addressList==null || addressList.size()==0){
             String s1=String.valueOf(lat);
             String s2=String.valueOf(lon);
-            ourSity=s1 + "," + s2;
+            myLoc =s1 + "," + s2;
         }else{
 
-            ourSity=addressList.get(0).getAddressLine(0);
+            myLoc =addressList.get(0).getAddressLine(0);
 
         }
-        return ourSity;
+        return myLoc;
 
 
     }
+
     private Date getDateTime(){
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         Date date = new Date();
         String sDate= dateFormat.format(date);
         Toast.makeText(this,sDate,Toast.LENGTH_SHORT).show();
@@ -319,7 +340,7 @@ public class CreatePostActivity extends AppCompatActivity implements AdapterView
     }
     public Date convertStringToDate(String dtStart){
 
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
         try {
             Date date = format.parse(dtStart);
             return date;

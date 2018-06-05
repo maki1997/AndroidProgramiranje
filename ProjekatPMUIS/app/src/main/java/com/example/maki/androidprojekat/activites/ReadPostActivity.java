@@ -1,6 +1,5 @@
 package com.example.maki.androidprojekat.activites;
 
-import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -17,21 +16,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.maki.androidprojekat.Adapters.CommentAdapter;
 import com.example.maki.androidprojekat.Adapters.SectionsPagerAdapter;
-import com.example.maki.androidprojekat.Database.PostContract;
+import com.example.maki.androidprojekat.Database.Contracts.PostContract;
 import com.example.maki.androidprojekat.R;
-import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
+import com.example.maki.androidprojekat.Database.DB_Helper;
 import com.example.maki.androidprojekat.fragments.CommentFragment;
 import com.example.maki.androidprojekat.fragments.PostFragment;
-import com.example.maki.androidprojekat.model.Comment;
 import com.example.maki.androidprojekat.model.Post;
-import com.example.maki.androidprojekat.model.Tag;
 import com.example.maki.androidprojekat.model.User;
 
 import java.text.DateFormat;
@@ -39,7 +34,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class ReadPostActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
@@ -48,7 +42,7 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
     private String[] lista;
     private String[] postovii;
     private ActionBarDrawerToggle drawerListener;
-    private HelperDatabaseRead helperDatabaseRead;
+    private DB_Helper helperDatabaseRead;
     private ArrayList<Post> posts = new ArrayList<Post>();
     private Post post=null;
     private TextView textView;
@@ -88,8 +82,9 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
                     startActivity(new Intent(view.getContext(), SettingsAcitivity.class));
                 }
                 if (position == 3) {
+                    finishAffinity();
                     startActivity(new Intent(view.getContext(), LoginActivity.class));
-                    finish();
+
                 }
             }
         });
@@ -116,11 +111,11 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
                 R.string.openNavDrawer,R.string.closeNavDrawer){
             @Override
             public void onDrawerOpened(View drawerView) {
-                helperDatabaseRead = new HelperDatabaseRead();
+                helperDatabaseRead = new DB_Helper();
                 usernameND = (TextView) findViewById(R.id.usernameDrawer);
                 nameND = (TextView) findViewById(R.id.nameDrawer);
                 User u=null;
-                for(User uu:helperDatabaseRead.loadUsersFromDatabase(ReadPostActivity.this)){
+                for(User uu:helperDatabaseRead.readUsers(ReadPostActivity.this)){
                     if(uu.getId() == idUser){
                         u=uu;
                     }
@@ -182,8 +177,8 @@ public class ReadPostActivity extends AppCompatActivity implements AdapterView.O
         if(item.getItemId() == R.id.delete){
             Intent myIntent = getIntent();
             id= myIntent.getIntExtra("id",-1);
-            helperDatabaseRead = new HelperDatabaseRead();
-            posts=helperDatabaseRead.loadPostsFromDatabase(this);
+            helperDatabaseRead = new DB_Helper();
+            posts=helperDatabaseRead.readPosts(this);
             if(id != -1) {
                 for (Post pp : posts) {
                     if (pp.getId() == id) {

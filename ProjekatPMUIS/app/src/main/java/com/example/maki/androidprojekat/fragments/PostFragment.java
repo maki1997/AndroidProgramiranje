@@ -2,31 +2,24 @@ package com.example.maki.androidprojekat.fragments;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.annotation.RequiresPermission;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.maki.androidprojekat.Database.HelperDatabaseRead;
+import com.example.maki.androidprojekat.Database.DB_Helper;
 import com.example.maki.androidprojekat.R;
-import com.example.maki.androidprojekat.activites.ReadPostActivity;
 import com.example.maki.androidprojekat.model.Post;
 import com.example.maki.androidprojekat.model.Tag;
 import com.example.maki.androidprojekat.model.User;
 
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,7 +33,7 @@ public class PostFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private ActionBarDrawerToggle toggle;
-    private HelperDatabaseRead helperDatabaseRead;
+    private DB_Helper helperDatabaseRead;
     private ArrayList<Post> posts = new ArrayList<Post>();
     private Post post=null;
     private TextView textView;
@@ -83,8 +76,8 @@ public class PostFragment extends Fragment {
         ImageButton dislike = (ImageButton) view.findViewById(R.id.imgDislike);
         dislike.setBackgroundResource(R.drawable.dislike);
 
-        helperDatabaseRead = new HelperDatabaseRead();
-        posts=helperDatabaseRead.loadPostsFromDatabase(getActivity());
+        helperDatabaseRead = new DB_Helper();
+        posts=helperDatabaseRead.readPosts(getActivity());
         if(id != -1){
             for(Post pp: posts){
                 if(pp.getId() == id){
@@ -97,23 +90,20 @@ public class PostFragment extends Fragment {
         textView.setText(post.getAuthor().getName());
         textView=(TextView)view.findViewById(R.id.titleRP);
         textView.setText(post.getTitle());
-        textView=(TextView)view.findViewById(R.id.locRP);
-        textView.setText(post.getLocation());
         textView=(TextView)view.findViewById(R.id.descRP);
         textView.setText(post.getDescription());
+        textView=(TextView)view.findViewById(R.id.locRP);
+        textView.setText(post.getLocation());
         textView=(TextView)view.findViewById(R.id.tagRP);
-        List<Tag> tags=post.getTags();
-        String tag="";
-        int size= -1;
-        if(post.getTags() == null){
-            size=0;
-        }else{
-            size=post.getTags().size();
+        ArrayList<Tag> tags = helperDatabaseRead.readTags(getActivity());
+        List<String> naziviTagova = new ArrayList<String>();
+        for(Tag t : tags){
+            if(t.getPost_id() == post.getId()){
+                naziviTagova.add(t.getName());
+            }
         }
-        for(int i =0 ;i< size;i++){
-            tag=tag+ ", "+tags.get(i).getName();
-            textView.setText(tag);
-        }
+        String tagZaTW = naziviTagova.toString().replace("[","#").replace(",","#");
+        textView.setText(removeLastChar(tagZaTW));
         textView=(TextView)view.findViewById(R.id.likes);
         String like= String.valueOf(post.getLikes());
         textView.setText(like);
@@ -121,16 +111,19 @@ public class PostFragment extends Fragment {
         String disslike= String.valueOf(post.getDislikes());
         textView.setText(disslike);
         textView=(TextView)view.findViewById(R.id.date);
-        String date = new SimpleDateFormat("dd.MM.yyyy").format(post.getDate());
+        String date = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(post.getDate());
         textView.setText(date);
     }
+
+    private static String removeLastChar(String str){
+        return str.substring(0,str.length() - 1);}
 
 
     public void likeAndDislike(final View view){
         SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("mPref",0);
         idUser = pref.getInt("id",-1);
         User u=null;
-        for(User uu:helperDatabaseRead.loadUsersFromDatabase(getActivity())){
+        for(User uu:helperDatabaseRead.readUsers(getActivity())){
             if(uu.getId() == idUser){
                 u=uu;
             }
@@ -146,7 +139,7 @@ public class PostFragment extends Fragment {
                             ImageButton imb = (ImageButton) view.findViewById(R.id.imgLike);
                             imb.setBackgroundResource(R.drawable.liked);
                             stanje=1;
-                            helperDatabaseRead = new HelperDatabaseRead();
+                            helperDatabaseRead = new DB_Helper();
                             helperDatabaseRead.updatePost(post,getActivity(),null,null);
                             textView=(TextView)view.findViewById(R.id.likes);
                             textView.setText(String.valueOf(post.getLikes()));
@@ -156,7 +149,7 @@ public class PostFragment extends Fragment {
                             ImageButton imbd = (ImageButton) view.findViewById(R.id.imgLike);
                             imbd.setBackgroundResource(R.drawable.like);
                             stanje=0;
-                            helperDatabaseRead = new HelperDatabaseRead();
+                            helperDatabaseRead = new DB_Helper();
                             helperDatabaseRead.updatePost(post,getActivity(),null,null);
                             textView=(TextView)view.findViewById(R.id.likes);
                             textView.setText(String.valueOf(post.getLikes()));
@@ -169,7 +162,7 @@ public class PostFragment extends Fragment {
                             imbds.setBackgroundResource(R.drawable.dislike);
                             ImageButton imbds1 = (ImageButton) view.findViewById(R.id.imgLike);
                             imbds1.setBackgroundResource(R.drawable.liked);
-                            helperDatabaseRead = new HelperDatabaseRead();
+                            helperDatabaseRead = new DB_Helper();
                             helperDatabaseRead.updatePost(post,getActivity(),null,null);
                             textView=(TextView)view.findViewById(R.id.likes);
                             textView.setText(String.valueOf(post.getLikes()));
@@ -190,7 +183,7 @@ public class PostFragment extends Fragment {
                             stanje=-1;
                             ImageButton imbd = (ImageButton) view.findViewById(R.id.imgDislike);
                             imbd.setBackgroundResource(R.drawable.disliked);
-                            helperDatabaseRead = new HelperDatabaseRead();
+                            helperDatabaseRead = new DB_Helper();
                             helperDatabaseRead.updatePost(post,getActivity(),null,null);
 
                             textView=(TextView)view.findViewById(R.id.dislikes);
@@ -204,7 +197,7 @@ public class PostFragment extends Fragment {
                             ImageButton sss = (ImageButton) view.findViewById(R.id.imgLike);
                             sss.setBackgroundResource(R.drawable.like);
                             stanje=-1;
-                            helperDatabaseRead = new HelperDatabaseRead();
+                            helperDatabaseRead = new DB_Helper();
                             helperDatabaseRead.updatePost(post,getActivity(),null,null);
                             textView=(TextView)view.findViewById(R.id.likes);
                             textView.setText(String.valueOf(post.getLikes()));
@@ -217,7 +210,7 @@ public class PostFragment extends Fragment {
                             ImageButton imbds = (ImageButton) view.findViewById(R.id.imgDislike);
                             imbds.setBackgroundResource(R.drawable.dislike);
                             stanje=0;
-                            helperDatabaseRead = new HelperDatabaseRead();
+                            helperDatabaseRead = new DB_Helper();
                             helperDatabaseRead.updatePost(post,getActivity(),null,null);
 
                             textView=(TextView)view.findViewById(R.id.dislikes);

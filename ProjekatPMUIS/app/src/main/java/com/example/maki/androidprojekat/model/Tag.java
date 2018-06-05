@@ -9,21 +9,21 @@ import java.util.List;
 public class Tag {
     private int id;
     private String name;
-    private int post;
+    private int post_id;
 
     public Tag(){
     }
 
-    public Tag(int id, String name, int posts) {
+    public Tag(int id, String name, int post_id) {
         this.id = id;
         this.name = name;
-        this.post = posts;
+        this.post_id = post_id;
     }
 
-    public Tag(String name,int post){
+    public Tag(String name,int post_id){
 
         this.name=name;
-        this.post = post;
+        this.post_id = post_id;
     }
 
     public int getId() {
@@ -42,12 +42,12 @@ public class Tag {
         this.name = name;
     }
 
-    public int getPosts() {
-        return post;
+    public int getPost_id() {
+        return post_id;
     }
 
-    public void setPosts(int post) {
-        this.post = post;
+    public void setPost_id(int post) {
+        this.post_id = post;
     }
 
 

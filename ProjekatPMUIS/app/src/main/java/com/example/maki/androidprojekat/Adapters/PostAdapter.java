@@ -39,7 +39,7 @@ public class PostAdapter extends ArrayAdapter<Post> {
         //ImageView image_view = view.findViewById(R.id.item_icon);
         TextView date_view = view.findViewById(R.id.date_post_list);
         TextView title_view = view.findViewById(R.id.title_post_list);
-        String newDate = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(post.getDate());
+        String newDate = new SimpleDateFormat("dd.MM.yyyy").format(post.getDate());
         date_view.setText(newDate);
         title_view.setText(post.getTitle());
         //image_view.setImageBitmap(post.getPhoto());
